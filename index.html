@@ -135,20 +135,16 @@
     }
     :focus:not(:focus-visible) { outline: none; }
 
-    /* Respect users who prefer reduced motion */
+    /* Reduced motion: this site IS a motion showcase, so we only calm the
+       ambient page-level effects (not the interactive demos or the marquee). */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-        scroll-behavior: auto !important;
-      }
+      html { scroll-behavior: auto; }
     }
 
-    /* Pause continuous demo animations while off-screen (perf) */
+    /* Pause off-screen interactive demos while not visible (perf).
+       Marquee is intentionally excluded so the hero banner never freezes. */
     .demo-box.anim-paused,
-    .demo-box.anim-paused *,
-    .marquee.anim-paused { animation-play-state: paused !important; }
+    .demo-box.anim-paused * { animation-play-state: paused !important; }
 
     /* Deep-link: shareable pattern number + targeted-card highlight */
     .card { scroll-margin-top: 90px; }
@@ -3443,7 +3439,7 @@ trigger.addEventListener('click', (e) => {
           entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
         });
       }, { rootMargin: '120px' });
-      document.querySelectorAll('.demo-box, .marquee').forEach(el => animObserver.observe(el));
+      document.querySelectorAll('.demo-box').forEach(el => animObserver.observe(el));
     }
 
     // Custom cursor tracker (precise-pointer devices only)
