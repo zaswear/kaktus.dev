@@ -14,11 +14,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Serve site
+        run: |
+          nohup python3 -m http.server 8080 > /tmp/http.log 2>&1 &
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:8080/index.html > /dev/null && exit 0
+            sleep 0.5
+          done
+          echo "Static server failed to start"; cat /tmp/http.log; exit 1
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
-            http://localhost:port/index.html
-          staticDistDir: ./
+            http://localhost:8080/index.html
           uploadArtifacts: true
           temporaryPublicStorage: true
