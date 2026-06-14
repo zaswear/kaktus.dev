@@ -45,7 +45,7 @@ This repository is configured with robust workflows in `.github/workflows/` to e
 
 - **Lighthouse CI Audits (`lighthouse.yml`):** Runs automated Google Lighthouse reports (Performance, Accessibility, Best Practices, SEO) on every Push and Pull Request.
 - **Broken Link Checker (`link-checker.yml`):** Scheduled to run weekly using `lychee` to ensure all documentation and external links remain active.
-- **Sentry Integration:** Lightweight browser error tracking loaded via CDN in `index.html`. Ready for production monitoring (just replace the DSN placeholder with your own Sentry DSN).
+- **Bugsnag Monitoring:** Integrated client-side error and performance monitoring loaded dynamically in `index.html` using SmartBear Bugsnag SDK.
 
 ---
 

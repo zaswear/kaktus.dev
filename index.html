@@ -8,23 +8,12 @@
   <!-- SVG Cactus Favicon (Fixes 404 error) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌵</text></svg>">
   
-  <!-- Sentry SDK for JavaScript Error Monitoring -->
-  <script src="https://browser.sentry-cdn.com/8.9.2/bundle.min.js" crossorigin="anonymous"></script>
-  <script>
-    try {
-      if (typeof Sentry !== 'undefined') {
-        const dsn = "https://your-dsn-here@sentry.io/123456"; // Reemplazar con DSN real de Sentry
-        if (dsn && !dsn.includes("your-dsn-here")) {
-          Sentry.init({
-            dsn: dsn,
-            integrations: [],
-            tracesSampleRate: 1.0,
-          });
-        }
-      }
-    } catch (e) {
-      console.warn("Sentry init failed:", e);
-    }
+  <!-- Bugsnag Error & Performance Monitoring -->
+  <script src="//d2wy8f7a9ursnm.cloudfront.net/v8/bugsnag.min.js"></script>
+  <script type="module">
+    import BugsnagPerformance from '//d2wy8f7a9ursnm.cloudfront.net/v1/bugsnag-performance.min.js'
+    Bugsnag.start({ apiKey: '9a2d74449e1c978a591c3c16f97dbd9d' })
+    BugsnagPerformance.start({ apiKey: '9a2d74449e1c978a591c3c16f97dbd9d' })
   </script>
 
   <meta name="description" content="kaktus.dev - A massive interactive showcase of 38 premium frontend design patterns, high-performance fluid transitions, and native Web APIs.">
