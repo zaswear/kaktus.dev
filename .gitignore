@@ -6,3 +6,6 @@ kaktus-pro-templates.zip
 .idea/
 .vscode/
 Thumbs.db
+
+# Local development and AI handover docs
+.docs/
