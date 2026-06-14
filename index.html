@@ -4,6 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>kaktus.dev · Premium Design Craft & Web Aesthetics</title>
+  
+  <!-- SVG Cactus Favicon (Fixes 404 error) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌵</text></svg>">
+  
+  <!-- Sentry SDK for JavaScript Error Monitoring -->
+  <script src="https://browser.sentry-cdn.com/8.9.2/bundle.min.js" crossorigin="anonymous"></script>
+  <script>
+    try {
+      if (typeof Sentry !== 'undefined') {
+        const dsn = "https://your-dsn-here@sentry.io/123456"; // Reemplazar con DSN real de Sentry
+        if (dsn && !dsn.includes("your-dsn-here")) {
+          Sentry.init({
+            dsn: dsn,
+            integrations: [],
+            tracesSampleRate: 1.0,
+          });
+        }
+      }
+    } catch (e) {
+      console.warn("Sentry init failed:", e);
+    }
+  </script>
+
   <meta name="description" content="kaktus.dev - A massive interactive showcase of 38 premium frontend design patterns, high-performance fluid transitions, and native Web APIs.">
   <meta name="author" content="zaswear">
   
@@ -1027,6 +1050,37 @@
     .hl-tag { color: #f43f5e; font-weight: 700; }
     .hl-attr { color: #fb923c; }
     .hl-comm { color: #6b7280; font-style: italic; }
+
+    /* Code Viewer Tabs Styling */
+    .code-viewer-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      flex-shrink: 0;
+    }
+    .code-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-mid);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .code-tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .code-tab-btn.active {
+      color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.05);
+      border-color: rgba(var(--accent-rgb), 0.2);
+    }
 
     /* Custom scrollbar for code viewer */
     .code-viewer-body::-webkit-scrollbar {
@@ -2169,6 +2223,12 @@
         <button class="popup-close" popovertarget="code-viewer" popovertargetaction="hide">Close</button>
       </div>
     </div>
+    <div class="code-viewer-tabs">
+      <button class="code-tab-btn active" data-tab="all">All Files</button>
+      <button class="code-tab-btn" data-tab="html">HTML</button>
+      <button class="code-tab-btn" data-tab="css">CSS</button>
+      <button class="code-tab-btn" data-tab="js">JavaScript</button>
+    </div>
     <div class="code-viewer-body">
       <pre><code id="code-block"></code></pre>
     </div>
@@ -3069,12 +3129,72 @@ trigger.addEventListener('click', (e) => {
       return temp;
     }
 
+    // Split code snippets into HTML, CSS, and JS parts
+    function splitSnippet(code) {
+      const parts = { html: '', css: '', js: '' };
+      
+      const htmlMarker = "<!-- HTML";
+      const cssMarker = "/* CSS";
+      const jsMarker = "/* JavaScript";
+      const jsMarkerAlt = "/* JS";
+      
+      const htmlStart = code.indexOf(htmlMarker);
+      const cssStart = code.indexOf(cssMarker);
+      let jsStart = code.indexOf(jsMarker);
+      if (jsStart === -1) {
+        jsStart = code.indexOf(jsMarkerAlt);
+      }
+      
+      const indices = [
+        { key: 'html', idx: htmlStart !== -1 ? htmlStart : 0 },
+        { key: 'css', idx: cssStart },
+        { key: 'js', idx: jsStart }
+      ].filter(item => item.idx !== -1).sort((a, b) => a.idx - b.idx);
+      
+      for (let i = 0; i < indices.length; i++) {
+        const { key, idx } = indices[i];
+        const end = i + 1 < indices.length ? indices[i+1].idx : code.length;
+        let block = code.substring(idx, end).trim();
+        
+        // Clean comments
+        if (key === 'html') {
+          block = block.replace(/^<!--[\s\S]*?-->\s*/, '');
+        } else if (key === 'css') {
+          block = block.replace(/^\/\*[\s\S]*?\*\/\s*/, '');
+        } else if (key === 'js') {
+          block = block.replace(/^\/\*[\s\S]*?\*\/\s*/, '');
+        }
+        parts[key] = block;
+      }
+      return parts;
+    }
+
     // Code viewer modal element bindings
     const codeViewer = document.getElementById('code-viewer');
     const codeBlock = document.getElementById('code-block');
     const codeTitle = document.getElementById('code-viewer-title');
     const codeCopyBtn = document.getElementById('code-copy-btn');
+    const tabButtons = document.querySelectorAll('.code-tab-btn');
     let activeCodeText = "";
+    let activeSnippetParts = { html: '', css: '', js: '', all: '' };
+
+    function renderActiveTab(tabName) {
+      let code = activeSnippetParts[tabName] || "";
+      if (tabName === 'js' && !code.trim()) {
+        code = "/* No JavaScript needed for this interaction */";
+      }
+      activeCodeText = code;
+      codeBlock.innerHTML = highlightCode(code);
+    }
+
+    tabButtons.forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabBtn.classList.add('active');
+        const tabName = tabBtn.getAttribute('data-tab');
+        renderActiveTab(tabName);
+      });
+    });
 
     document.querySelectorAll('.code-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -3082,8 +3202,16 @@ trigger.addEventListener('click', (e) => {
         const id = btn.getAttribute('data-code-id');
         const code = CODE_SNIPPETS[id];
         if (code) {
-          activeCodeText = code;
-          codeBlock.innerHTML = highlightCode(code);
+          // Reset tabs
+          tabButtons.forEach(t => t.classList.remove('active'));
+          const defaultTab = document.querySelector('.code-tab-btn[data-tab="all"]');
+          if (defaultTab) defaultTab.classList.add('active');
+
+          activeSnippetParts = splitSnippet(code);
+          activeSnippetParts.all = code;
+
+          renderActiveTab('all');
+
           const cardTitle = btn.closest('.card').querySelector('.card-title').textContent;
           codeTitle.textContent = `Code: ${cardTitle}`;
           codeCopyBtn.textContent = "Copy";
