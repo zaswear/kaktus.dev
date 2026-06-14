@@ -18,7 +18,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
-            http://localhost/index.html
+            http://localhost:port/index.html
           staticDistDir: ./
           uploadArtifacts: true
           temporaryPublicStorage: true
