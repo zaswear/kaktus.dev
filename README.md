@@ -29,33 +29,6 @@ El showcase contiene los siguientes **38 ejemplos interactivos** que demuestran 
 
 ---
 
-## 🚀 Cómo Lanzar en Local
-
-Al tratarse de una web estática optimizada para rendimiento y sin dependencias de npm, puedes abrirla instantáneamente de las siguientes formas:
-
-### Opción 1: Abrir Directamente en el Navegador
-Puedes abrir el archivo directamente en cualquier navegador moderno:
-```bash
-# En Windows / WSL
-explorer.exe index.html
-```
-
-### Opción 2: Usar un Servidor Estático de una Línea
-Si prefieres servir la página localmente:
-
-**Con Python:**
-```bash
-python3 -m http.server 3004
-```
-Luego visita [http://localhost:3004](http://localhost:3004).
-
-**Con Node/npx:**
-```bash
-npx serve
-```
-
----
-
 ## 🛡️ Comunidad, Seguridad y Licencia
 
 Este es un proyecto abierto al aprendizaje pero con protección de marca y diseño:
