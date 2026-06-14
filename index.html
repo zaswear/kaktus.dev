@@ -1,0 +1,3381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kaktus.dev · Premium Design Craft & Web Aesthetics</title>
+  <meta name="description" content="kaktus.dev - Un escaparate interactivo de 38 patrones de diseño frontend premium, transiciones fluidas de alto rendimiento y APIs web nativas.">
+  <meta name="author" content="zaswear">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zaswear.github.io/kaktus.dev/">
+  <meta property="og:title" content="kaktus.dev · Premium Design Craft & Web Aesthetics">
+  <meta property="og:description" content="Un escaparate interactivo de 38 patrones de diseño frontend premium, transiciones fluidas de alto rendimiento y APIs web nativas sin dependencias pesadas.">
+  <meta property="og:image" content="https://zaswear.github.io/kaktus.dev/assets/og-preview.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://zaswear.github.io/kaktus.dev/">
+  <meta property="twitter:title" content="kaktus.dev · Premium Design Craft & Web Aesthetics">
+  <meta property="twitter:description" content="Un escaparate interactivo de 38 patrones de diseño frontend premium, transiciones fluidas de alto rendimiento y APIs web nativas sin dependencias pesadas.">
+  <meta property="twitter:image" content="https://zaswear.github.io/kaktus.dev/assets/og-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #07090e;
+      --surface: #0e121a;
+      --surface-hi: #161c28;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hi: rgba(255, 255, 255, 0.12);
+      --text: #f3f4f6;
+      --text-mid: #9ca3af;
+      --text-faint: #4b5563;
+      
+      /* Cactus Theme Colors */
+      --accent: #22c55e;
+      --accent-rgb: 34, 197, 94;
+      --accent-hover: #4ade80;
+      --accent-glow: rgba(34, 197, 94, 0.15);
+      
+      --radius: 16px;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-sans: 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --surface-hi: #f3f4f6;
+      --border: rgba(0, 0, 0, 0.06);
+      --border-hi: rgba(0, 0, 0, 0.1);
+      --text: #111827;
+      --text-mid: #4b5563;
+      --text-faint: #9ca3af;
+      --accent: #16a34a;
+      --accent-rgb: 22, 163, 74;
+      --accent-hover: #15803d;
+      --accent-glow: rgba(22, 163, 74, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none; /* Custom cursor override */
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      transition: background-color 0.4s, color 0.4s;
+      background-image: 
+        radial-gradient(circle at 100% 0%, var(--accent-glow) 0%, transparent 40%),
+        radial-gradient(circle at 0% 100%, var(--accent-glow) 0%, transparent 40%);
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: width 0.12s, height 0.12s, background-color 0.12s;
+      mix-blend-mode: difference;
+    }
+    body:active .custom-cursor {
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent);
+    }
+    body.popover-active .custom-cursor {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Scroll progress bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      animation: grow auto linear;
+      animation-timeline: scroll(root);
+      z-index: 1000;
+    }
+    @keyframes grow {
+      to { transform: scaleX(1); }
+    }
+
+    /* Container layout */
+    .app-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 6rem;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 0;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo span {
+      color: var(--accent);
+    }
+    .theme-btn {
+      background: var(--surface-hi);
+      border: 1px solid var(--border-hi);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .theme-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 6rem;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 1.5rem;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      color: var(--text-mid);
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-weight: 300;
+    }
+
+    /* Buttons */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 99px;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 10px 20px -5px rgba(var(--accent-rgb), 0.3);
+    }
+    .cta-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px -5px rgba(var(--accent-rgb), 0.45);
+    }
+
+    /* Infinite Marquee */
+    .marquee-wrap {
+      overflow: hidden;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      margin-bottom: 6rem;
+    }
+    .marquee {
+      display: flex;
+      gap: 3rem;
+      width: max-content;
+      animation: scroll-marquee 25s linear infinite;
+    }
+    .marquee span {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .marquee span::after {
+      content: '✦';
+      color: var(--accent);
+    }
+    @keyframes scroll-marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Showcase grid */
+    .showcase-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .showcase-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    
+    .grid-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 6rem;
+    }
+
+    /* Modern cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 400px;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    
+    /* View Timeline Animation (entry fade & scale on scroll) */
+    @supports (animation-timeline: view()) {
+      .card {
+        view-timeline-name: --card-view;
+        view-timeline-axis: block;
+        animation-timeline: --card-view;
+        animation-name: entry-fade-scale;
+        animation-range: entry 0% cover 25%;
+        animation-fill-mode: both;
+      }
+    }
+    @keyframes entry-fade-scale {
+      from { opacity: 0; transform: scale(0.95) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Ambient card spotlight */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(var(--accent-rgb), 0.05), transparent 80%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover::before {
+      opacity: 1;
+    }
+    .card:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Card header elements */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      z-index: 5;
+    }
+
+    .card-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      z-index: 5;
+    }
+    .card-desc {
+      color: var(--text-mid);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+      flex-grow: 1;
+      z-index: 5;
+    }
+
+    /* Interactive Demos inside cards */
+    .demo-box {
+      background: var(--surface-hi);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    /* Code button style */
+    .code-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .code-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .code-btn svg {
+      opacity: 0.7;
+    }
+
+    /* Demo 1: Glass button & hover state */
+    .glass-btn {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      transition: all 0.25s;
+    }
+    .glass-btn:hover {
+      background: rgba(var(--accent-rgb), 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* Demo 2: Native Details CSS Accordion */
+    .accordion-demo {
+      width: 100%;
+    }
+    .accordion-demo details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .accordion-demo summary {
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+      list-style: none;
+      outline: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .accordion-demo summary::after {
+      content: '→';
+      transition: transform 0.2s;
+    }
+    .accordion-demo details[open] summary::after {
+      transform: rotate(90deg);
+    }
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .accordion-demo details[open] .accordion-content {
+      grid-template-rows: 1fr;
+    }
+    .accordion-content-inner {
+      min-height: 0;
+    }
+    .accordion-text {
+      padding: 0 14px 14px;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+    }
+
+    /* Demo 3: Popover Trigger Button */
+    .popover-trigger-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .popover-trigger-btn:hover {
+      border-color: var(--accent);
+    }
+
+    /* Demo 4: Text Scramble */
+    .scramble-text {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Demo 5: 3D Tilt */
+    .tilt-box-container {
+      perspective: 800px;
+      width: 100%;
+    }
+    .tilt-inner {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hi) 100%);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.1s ease-out;
+      transform-style: preserve-3d;
+    }
+    .tilt-inner span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-mid);
+      transform: translateZ(20px);
+    }
+
+    /* Demo 6: Custom Neon Switch */
+    .switch-container {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch-input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-mid);
+      border-radius: 50%;
+      transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .switch-input:checked + .switch-slider {
+      background-color: rgba(var(--accent-rgb), 0.15);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .switch-input:checked + .switch-slider:before {
+      transform: translateX(24px);
+      background-color: var(--accent);
+    }
+
+    /* Demo 7: Glass Orb Background */
+    .glass-orb-bg {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: orb-float 6s infinite alternate ease-in-out;
+    }
+    @keyframes orb-float {
+      0% { transform: translate(-30px, -20px); }
+      100% { transform: translate(30px, 20px); }
+    }
+    .frosted-glass {
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(var(--accent-rgb), 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* Demo 8: Spring Bouncy Button */
+    .spring-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: transform 0.1s;
+    }
+    .spring-btn:active {
+      transform: scale(0.9);
+    }
+    .spring-btn.animate-spring {
+      animation: spring-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes spring-bounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.18); }
+      50% { transform: scale(0.88); }
+      70% { transform: scale(1.05); }
+      90% { transform: scale(0.98); }
+      100% { transform: scale(1); }
+    }
+
+    /* Demo 9: Inverted coupon corner cutout */
+    .inverted-cutout-card {
+      width: 100%;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      mask: 
+        radial-gradient(circle at 0 50%, transparent 10px, #000 11px) -10px 0/100% 100% no-repeat,
+        radial-gradient(circle at 100% 50%, transparent 10px, #000 11px) 10px 0/100% 100% no-repeat;
+      -webkit-mask: 
+        radial-gradient(circle at 0 50%, transparent 10px, #000 11px) -10px 0/100% 100% no-repeat,
+        radial-gradient(circle at 100% 50%, transparent 10px, #000 11px) 10px 0/100% 100% no-repeat;
+      background: var(--surface);
+      text-align: center;
+    }
+
+    /* Native Popover Styling */
+    .popup-box {
+      border: 1px solid var(--border-hi);
+      background: var(--surface-hi);
+      border-radius: 12px;
+      padding: 1.25rem;
+      max-width: 280px;
+      color: var(--text);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      z-index: 1000;
+    }
+    .popup-box[popover] {
+      margin: auto;
+      inset: unset;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: inherit;
+    }
+    .popup-box::backdrop {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    .popup-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .popup-text {
+      font-size: 0.75rem;
+      color: var(--text-mid);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    .popup-close {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .popup-close:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Card 10: Magnetic element wrapper */
+    .magnetic-wrap {
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .magnetic-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Card 11: Gooey Fusion Liquid Blobs */
+    .gooey-container {
+      filter: url('#gooey-filter');
+      position: relative;
+      width: 120px;
+      height: 60px;
+      background: transparent;
+    }
+    .blob {
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 12px;
+    }
+    .blob1 {
+      left: 15px;
+      animation: blob-move 3.5s infinite alternate ease-in-out;
+    }
+    .blob2 {
+      right: 15px;
+    }
+    @keyframes blob-move {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(50px); }
+    }
+
+    /* Card 12: OkLch gradient slider */
+    .oklch-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .oklch-color-box {
+      height: 45px;
+      border-radius: 8px;
+      background: oklch(0.65 0.25 140);
+      transition: background 0.1s ease;
+      border: 1px solid var(--border);
+    }
+    .oklch-slider {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Card 13: Scroll-driven progress ring */
+    .scroll-ring-container {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .scroll-ring-container svg {
+      transform: rotate(-90deg);
+    }
+    .ring-bg {
+      fill: none;
+      stroke: var(--surface);
+      stroke-width: 8px;
+    }
+    .ring-fg {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 8px;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      stroke-dashoffset: 251.2;
+      transition: stroke-dashoffset 0.1s ease;
+    }
+    .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Card 14: Analog Film Grain */
+    .grain-container {
+      width: 100%;
+      height: 110px;
+      position: relative;
+      background: #080a10;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      gap: 6px;
+    }
+    .grain-overlay {
+      position: absolute;
+      inset: -200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.15;
+      pointer-events: none;
+      animation: grain-dance 8s steps(10) infinite;
+    }
+    @keyframes grain-dance {
+      0%, 100% { transform:translate(0, 0); }
+      10% { transform:translate(-5%, -10%); }
+      30% { transform:translate(-15%, 5%); }
+      50% { transform:translate(-5%, 10%); }
+      70% { transform:translate(15%, -5%); }
+      90% { transform:translate(5%, -15%); }
+    }
+
+    /* Card 15: Staggered Wave */
+    .stagger-text-container {
+      display: flex;
+      gap: 5px;
+      user-select: none;
+    }
+    .stagger-letter {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-mid);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s;
+      transition-delay: calc(var(--i) * 0.04s);
+    }
+    .stagger-text-container:hover .stagger-letter {
+      transform: translateY(-8px);
+      color: var(--accent);
+    }
+
+    /* Card 16: Infinite Draggable Canvas */
+    .draggable-viewport {
+      width: 100%;
+      height: 110px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #06080d;
+      cursor: grab;
+    }
+    .draggable-viewport:active {
+      cursor: grabbing;
+    }
+    .draggable-canvas {
+      width: 400px;
+      height: 400px;
+      position: absolute;
+      top: -140px;
+      left: -140px;
+      transform: translate3d(0,0,0);
+    }
+    .canvas-grid-pattern {
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .canvas-marker {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* Card 17: Dynamic Lens Distortion */
+    .lens-container {
+      width: 100%;
+      height: 110px;
+      position: relative;
+      overflow: hidden;
+      background: #06080d;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .lens-grid {
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 15px 15px;
+    }
+    .lens-glass {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px solid rgba(var(--accent-rgb), 0.4);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.08);
+      backdrop-filter: blur(0.5px) scale(1.3);
+      -webkit-backdrop-filter: blur(0.5px) scale(1.3);
+      left: 50%;
+      top: 50%;
+      display: none;
+    }
+
+    /* Card 18: Neon Reactive Hover Text */
+    .neon-text-container {
+      display: flex;
+      gap: 6px;
+      user-select: none;
+    }
+    .neon-letter {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 750;
+      color: var(--text-faint);
+      transition: color 0.12s, text-shadow 0.12s;
+    }
+    .neon-letter:hover {
+      color: var(--accent);
+      text-shadow: 
+        0 0 5px var(--accent),
+        0 0 10px var(--accent),
+        0 0 20px var(--accent);
+      transition: 0s;
+    }
+
+    /* Code Viewer Modal Styling */
+    .code-viewer-modal {
+      border: 1px solid var(--border-hi);
+      background: #090d16;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 700px;
+      max-height: 80vh;
+      color: var(--text);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+      overflow: hidden;
+      z-index: 1001;
+    }
+    .code-viewer-modal:popover-open {
+      display: flex;
+      flex-direction: column;
+    }
+    .code-viewer-modal:popover-open,
+    .code-viewer-modal:popover-open * {
+      cursor: auto;
+    }
+    .code-viewer-modal::backdrop {
+      cursor: auto;
+    }
+    .code-viewer-modal[popover] {
+      margin: auto;
+      inset: unset;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .code-viewer-modal::backdrop {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+    }
+    .code-viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      flex-shrink: 0;
+    }
+    .code-viewer-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .code-copy-btn {
+      background: var(--surface-hi);
+      border: 1px solid var(--border-hi);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .code-copy-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .code-viewer-body {
+      overflow-y: auto;
+      flex-grow: 1;
+      background: #05070c;
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .code-viewer-body pre {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+    .code-viewer-body code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .hl-key { color: #a855f7; font-weight: 700; }
+    .hl-str { color: #10b981; }
+    .hl-tag { color: #f43f5e; font-weight: 700; }
+    .hl-attr { color: #fb923c; }
+    .hl-comm { color: #6b7280; font-style: italic; }
+
+    /* Custom scrollbar for code viewer */
+    .code-viewer-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .code-viewer-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .code-viewer-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    .code-viewer-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Card 19: Typewriter */
+    .typewriter-text {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 2.5s steps(18) infinite, blink 0.6s step-end infinite alternate;
+      width: 18ch;
+    }
+    @keyframes typing { 0%,100% { width: 0; } 50% { width: 18ch; } }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    /* Card 20: Parallax Tilt Layers */
+    .parallax-box { perspective: 600px; width: 100%; height: 100px; position: relative; }
+    .parallax-layer { position: absolute; border-radius: 8px; transition: transform 0.15s ease-out; }
+    .parallax-l1 { inset: 20px; background: rgba(var(--accent-rgb), 0.06); border: 1px solid var(--border); }
+    .parallax-l2 { inset: 30px; background: rgba(var(--accent-rgb), 0.1); border: 1px solid var(--border); }
+    .parallax-l3 { inset: 40px; background: rgba(var(--accent-rgb), 0.2); display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: var(--font-mono); color: var(--accent); }
+
+    /* Card 21: Morphing Blob */
+    .morph-blob {
+      width: 70px; height: 70px; background: var(--accent);
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morph-shape 6s ease-in-out infinite;
+    }
+    @keyframes morph-shape {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+      75% { border-radius: 40% 30% 60% 50% / 60% 40% 30% 70%; }
+    }
+
+    /* Card 22: Pulse Ripple */
+    .ripple-btn { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 8px; font-size: 0.8rem; }
+    .ripple-circle { position: absolute; border-radius: 50%; background: rgba(var(--accent-rgb), 0.3); transform: scale(0); animation: ripple-expand 0.6s ease-out forwards; pointer-events: none; }
+    @keyframes ripple-expand { to { transform: scale(4); opacity: 0; } }
+
+    /* Card 23: Gradient Border */
+    .gradient-border-box {
+      width: 100%; padding: 1.5rem; border-radius: 10px; text-align: center;
+      background: var(--surface);
+      position: relative;
+      z-index: 1;
+    }
+    .gradient-border-box::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 12px; z-index: -1;
+      background: conic-gradient(from var(--angle, 0deg), var(--accent), #a855f7, #f43f5e, #fb923c, var(--accent));
+      animation: rotate-gradient 3s linear infinite;
+    }
+    @keyframes rotate-gradient { to { --angle: 360deg; } }
+    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+    /* Card 24: Skeleton Shimmer */
+    .skeleton-box { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+    .skeleton-line { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hi) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    .skeleton-line:nth-child(2) { width: 75%; }
+    .skeleton-line:nth-child(3) { width: 50%; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Card 25: Counter Animation */
+    .counter-display { font-family: var(--font-mono); font-size: 2.5rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+    .counter-label { font-size: 10px; color: var(--text-mid); margin-top: 4px; }
+
+    /* Card 26: Flip Card 3D */
+    .flip-card-inner { width: 100%; height: 90px; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+    .flip-card-wrap:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 1px solid var(--border); }
+    .flip-card-front { background: var(--surface); color: var(--text); }
+    .flip-card-back { background: var(--accent); color: #000; font-weight: 700; transform: rotateY(180deg); }
+
+    /* Card 27: Elastic Pull */
+    .elastic-bar { width: 80%; height: 6px; background: var(--border); border-radius: 3px; position: relative; cursor: grab; }
+    .elastic-handle { width: 20px; height: 20px; background: var(--accent); border-radius: 50%; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 10px var(--accent-glow); }
+
+    /* Card 28: Particle Trail */
+    .particle-canvas { width: 100%; height: 100px; position: relative; overflow: hidden; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); }
+    .trail-dot { position: absolute; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
+
+    /* Card 29: Text Gradient Scroll Reveal */
+    .gradient-reveal-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; background: linear-gradient(90deg, var(--accent) var(--reveal, 0%), var(--text-faint) var(--reveal, 0%)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: --reveal 0.1s; }
+
+    /* Card 30: CSS Tooltip */
+    .tooltip-trigger { position: relative; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; }
+    .tooltip-trigger::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) scale(0.8); background: var(--accent); color: #000; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .tooltip-trigger::before { content: ''; position: absolute; bottom: calc(100% + 3px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--accent); opacity: 0; transition: opacity 0.2s; }
+    .tooltip-trigger:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+    .tooltip-trigger:hover::before { opacity: 1; }
+
+    /* Card 31: Blur Reveal */
+    .blur-reveal-box { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; }
+    .blur-reveal-content { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; filter: blur(8px); transition: filter 0.4s ease; user-select: none; }
+    .blur-reveal-box:hover .blur-reveal-content { filter: blur(0px); }
+    .blur-reveal-hint { position: absolute; font-size: 9px; color: var(--text-faint); bottom: 6px; font-family: var(--font-mono); transition: opacity 0.3s; }
+    .blur-reveal-box:hover .blur-reveal-hint { opacity: 0; }
+
+    /* Card 32: Orbit Rings */
+    .orbit-container { width: 80px; height: 80px; position: relative; }
+    .orbit-center { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--accent-glow); }
+    .orbit-ring { position: absolute; inset: 0; border: 1px solid var(--border); border-radius: 50%; animation: orbit-spin 4s linear infinite; }
+    .orbit-ring:nth-child(2) { inset: 10px; animation-duration: 3s; animation-direction: reverse; }
+    .orbit-ring:nth-child(3) { inset: 20px; animation-duration: 2s; }
+    .orbit-dot { position: absolute; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; top: -3px; left: 50%; transform: translateX(-50%); }
+    @keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+    /* Card 33: Masonry Layout */
+    .masonry-grid { columns: 2; column-gap: 8px; width: 100%; }
+    .masonry-item { break-inside: avoid; margin-bottom: 8px; border-radius: 6px; background: rgba(var(--accent-rgb), 0.08); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 9px; font-family: var(--font-mono); color: var(--text-mid); }
+
+    /* Card 34: Progress Steps */
+    .steps-container { display: flex; align-items: center; gap: 0; width: 100%; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; font-family: var(--font-mono); color: var(--text-faint); flex-shrink: 0; transition: all 0.3s; }
+    .step-circle.active { border-color: var(--accent); color: var(--accent); background: rgba(var(--accent-rgb), 0.1); }
+    .step-circle.done { border-color: var(--accent); background: var(--accent); color: #000; }
+    .step-line { flex: 1; height: 2px; background: var(--border); transition: background 0.3s; }
+    .step-line.active { background: var(--accent); }
+
+    /* Card 35: Dot Matrix */
+    .dot-matrix { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+    .dot-cell { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.15s, transform 0.15s; }
+    .dot-cell:hover { background: var(--accent); transform: scale(1.8); box-shadow: 0 0 8px var(--accent-glow); }
+
+    /* Card 36: Liquid Morph Button */
+    .liquid-btn { position: relative; padding: 10px 24px; background: transparent; border: none; color: var(--accent); font-weight: 700; font-size: 0.85rem; z-index: 1; }
+    .liquid-btn-bg { position: absolute; inset: 0; background: rgba(var(--accent-rgb), 0.1); border: 1px solid var(--accent); border-radius: 8px; transition: border-radius 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: -1; }
+    .liquid-btn:hover .liquid-btn-bg { border-radius: 50% 20% 40% 30% / 40% 50% 30% 60%; }
+
+    /* Card 37: Radial Menu */
+    .radial-container { position: relative; width: 100px; height: 100px; }
+    .radial-center-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #000; border: none; font-weight: 700; font-size: 16px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; transition: transform 0.2s; cursor: pointer; }
+    .radial-center-btn:hover { transform: translate(-50%, -50%) scale(1.1); }
+    .radial-item { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; }
+    .radial-container.open .radial-item { opacity: 1; }
+    .radial-container.open .ri-1 { transform: translate(-50%, -50%) translate(0, -36px); }
+    .radial-container.open .ri-2 { transform: translate(-50%, -50%) translate(34px, -12px); }
+    .radial-container.open .ri-3 { transform: translate(-50%, -50%) translate(34px, 12px); }
+    .radial-container.open .ri-4 { transform: translate(-50%, -50%) translate(0, 36px); }
+    .radial-container.open .ri-5 { transform: translate(-50%, -50%) translate(-34px, 12px); }
+    .radial-container.open .ri-6 { transform: translate(-50%, -50%) translate(-34px, -12px); }
+
+    /* Card 38: Noise Mesh Gradient */
+    .noise-mesh { width: 100%; height: 90px; border-radius: 8px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .noise-mesh-bg { width: 100%; height: 100%; background: linear-gradient(135deg, #22c55e 0%, #a855f7 50%, #f43f5e 100%); background-size: 300% 300%; animation: mesh-flow 6s ease infinite; }
+    .noise-mesh-grain { position: absolute; inset: -100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.4; mix-blend-mode: overlay; pointer-events: none; }
+    @keyframes mesh-flow { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 3rem;
+      color: var(--text-faint);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="progress-bar"></div>
+
+  <!-- Cursor Follower -->
+  <div class="custom-cursor" id="cursor"></div>
+
+  <!-- SVG Filter needed for gooey blobs -->
+  <svg style="position: absolute; width: 0; height: 0;" width="0" height="0">
+    <defs>
+      <filter id="gooey-filter">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="app-container">
+    
+    <!-- Top Nav Header -->
+    <header>
+      <div class="logo">
+        kaktus<span>.dev</span>
+      </div>
+      <button class="theme-btn" id="theme-toggle">THEME: DARK</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h2>
+        <span class="gradient-text">Aesthetics & Code</span><br>
+        in Perfect Sync.
+      </h2>
+      <p>
+        Un escaparate interactivo masivo de patrones de diseño modernos, transiciones fluidas de alto rendimiento y APIs web nativas sin frameworks pesados.
+      </p>
+      <a href="#showcase" class="cta-btn">
+        Explorar 18 Patrones
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+      </a>
+    </section>
+
+    <!-- Horizontal Marquee Banner -->
+    <div class="marquee-wrap">
+      <div class="marquee">
+        <span>CSS Scroll-Driven</span>
+        <span>HTML Popover API</span>
+        <span>Backdrop Filters</span>
+        <span>Zero Bloat</span>
+        <span>OkLch Colors</span>
+        <span>3D Matrix Transforms</span>
+        <span>Elastic Easing</span>
+        <span>CSS Grid Accordions</span>
+        <span>Magnetic Particles</span>
+        <span>Gooey Blobs</span>
+        <span>Interactive Lenses</span>
+        <!-- Duplicate for loop -->
+        <span>CSS Scroll-Driven</span>
+        <span>HTML Popover API</span>
+        <span>Backdrop Filters</span>
+        <span>Zero Bloat</span>
+        <span>OkLch Colors</span>
+        <span>3D Matrix Transforms</span>
+        <span>Elastic Easing</span>
+        <span>CSS Grid Accordions</span>
+        <span>Magnetic Particles</span>
+        <span>Gooey Blobs</span>
+        <span>Interactive Lenses</span>
+      </div>
+    </div>
+
+    <!-- Main Showcase -->
+    <section id="showcase">
+      <h3 class="showcase-title">Showcase de Patrones</h3>
+
+      <div class="grid-showcase">
+        
+        <!-- Card 1: Spotlight Hover -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">01 / GLOW</span>
+            <button class="code-btn" data-code-id="glow">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Foco de Cursor en CSS</h4>
+            <p class="card-desc">
+              Seguimiento de cursor reactivo sobre el fondo de la tarjeta usando variables de CSS nativas para iluminar el contorno.
+            </p>
+          </div>
+          <div class="demo-box">
+            <button class="glass-btn">Pasa el cursor</button>
+          </div>
+        </div>
+
+        <!-- Card 2: CSS Accordion -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">02 / HEIGHT</span>
+            <button class="code-btn" data-code-id="height">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Acordeón Nativo</h4>
+            <p class="card-desc">
+              Menús desplegables fluidos usando la etiqueta HTML details y transiciones de CSS Grid sin una sola línea de JS.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="accordion-demo">
+              <details>
+                <summary>Desplegar detalles</summary>
+                <div class="accordion-content">
+                  <div class="accordion-content-inner">
+                    <p class="accordion-text">
+                      Las transiciones nativas CSS animan a la perfección la altura del contenido hacia valores dinámicos intrínsecos.
+                    </p>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Popover API -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">03 / PORTAL</span>
+            <button class="code-btn" data-code-id="portal">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Popover API Nivel Top</h4>
+            <p class="card-desc">
+              Modales interactivos ligeros y nativos. El navegador gestiona el cierre con la tecla Esc y clicks fuera de la ventana.
+            </p>
+          </div>
+          <div class="demo-box">
+            <button class="popover-trigger-btn" popovertarget="demo-popover">Abrir Modal</button>
+          </div>
+        </div>
+
+        <!-- Card 4: Text Scramble / Decode -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">04 / ENCRYPT</span>
+            <button class="code-btn" data-code-id="encrypt">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Text Decode Effect</h4>
+            <p class="card-desc">
+              Animación clásica de Pixel Grid UI. Los caracteres se barajan aleatoriamente hasta encajar en el mensaje final.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+              <span class="scramble-text" id="scramble-txt">DECODE_ME</span>
+              <button class="glass-btn" onclick="triggerScramble()" style="margin-top: 8px;">Desencriptar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: 3D Tilt Card -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">05 / PERSPECTIVE</span>
+            <button class="code-btn" data-code-id="perspective">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Matriz de Rotación 3D</h4>
+            <p class="card-desc">
+              La tarjeta se inclina de forma reactiva al cursor siguiendo cálculos matriciales de perspectiva tridimensional.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="tilt-box-container" id="tilt-container">
+              <div class="tilt-inner" id="tilt-box">
+                <span>Inclinación 3D</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Custom Neon Switch -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">06 / FLUID</span>
+            <button class="code-btn" data-code-id="fluid">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Neon Switch Bouncy</h4>
+            <p class="card-desc">
+              Interruptor con estética de neón que utiliza transiciones de amortiguamiento y resorte elástico en CSS puro.
+            </p>
+          </div>
+          <div class="demo-box">
+            <label class="switch-container">
+              <input type="checkbox" class="switch-input">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Card 7: Glassmorphism with floating Orb -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">07 / FROST</span>
+            <button class="code-btn" data-code-id="frost">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Glassmorphism & Depth</h4>
+            <p class="card-desc">
+              Esfera flotante en segundo plano visible a través de un panel de vidrio esmerilado con desenfoque de fondo nativo.
+            </p>
+          </div>
+          <div class="demo-box" style="padding: 0;">
+            <div class="glass-orb-bg"></div>
+            <div class="frosted-glass">
+              <span style="font-size: 11px; font-family: var(--font-mono); opacity: 0.8;">FROSTED GLASS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 8: Spring Bouncy Button -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">08 / MOTION</span>
+            <button class="code-btn" data-code-id="motion">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Amortiguamiento Físico</h4>
+            <p class="card-desc">
+              Simulación de elasticidad al pulsar el botón con fotogramas clave que reproducen el rebote físico natural.
+            </p>
+          </div>
+          <div class="demo-box">
+            <button class="spring-btn" id="spring-trigger">Púlsame</button>
+          </div>
+        </div>
+
+        <!-- Card 9: Clip-Path Cutouts -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">09 / MASK</span>
+            <button class="code-btn" data-code-id="mask">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Máscaras y Recortes CSS</h4>
+            <p class="card-desc">
+              Recortes invertidos de bordes laterales simulando entradas de cine clásicas usando máscaras radiales nativas de CSS.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="inverted-cutout-card">
+              <span style="font-size: 10px; font-family: var(--font-mono); color: var(--accent); font-weight: 700; display: block; margin-bottom: 2px;">TICKET</span>
+              <span style="font-size: 12px;">Diseño con Máscara</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 10: Magnetic Attraction -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">10 / MAGNET</span>
+            <button class="code-btn" data-code-id="magnet">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Atracción Magnética</h4>
+            <p class="card-desc">
+              El botón se desplaza orgánicamente hacia la coordenada del cursor cuando este se encuentra en su zona de atracción.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="magnetic-wrap">
+              <button class="magnetic-btn">PULL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 11: Gooey Fusion -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">11 / LIQUID</span>
+            <button class="code-btn" data-code-id="liquid">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Filtros SVG Gooey</h4>
+            <p class="card-desc">
+              Efecto de viscosidad líquida al fusionar elementos usando un filtro de desenfoque y matriz de color SVG personalizado.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="gooey-container">
+              <div class="blob blob1"></div>
+              <div class="blob blob2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 12: OkLch Gradient Slider -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">12 / SPECTRUM</span>
+            <button class="code-btn" data-code-id="spectrum">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Espacio de Color OkLch</h4>
+            <p class="card-desc">
+              Cálculo y transición cromática en el espacio OkLch, garantizando un brillo uniforme perceptible y degradados perfectos.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="oklch-container">
+              <div class="oklch-color-box" id="oklch-box"></div>
+              <input type="range" min="0" max="360" value="140" id="oklch-slider" class="oklch-slider">
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 13: Scroll-driven Progress Ring -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">13 / TRACK</span>
+            <button class="code-btn" data-code-id="track">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Anillo de Progreso Scroll</h4>
+            <p class="card-desc">
+              SVG Circular dinámico que se dibuja automáticamente en base al porcentaje de lectura de la página web.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="scroll-ring-container">
+              <svg width="80" height="80" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="40" />
+                <circle class="ring-fg" cx="50" cy="50" r="40" id="scroll-ring-circle" />
+              </svg>
+              <div class="ring-text" id="ring-percent">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 14: Film Grain & Noise -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">14 / GRAIN</span>
+            <button class="code-btn" data-code-id="grain">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Grano de Película Analógico</h4>
+            <p class="card-desc">
+              Capa de ruido dinámico simulando texturas de grano de película con un slider interactivo para ajustar su intensidad.
+            </p>
+          </div>
+          <div class="demo-box" style="padding: 0;">
+            <div class="grain-container">
+              <div class="grain-overlay" id="grain-overlay"></div>
+              <span style="font-size: 10px; font-family: var(--font-mono); opacity: 0.5; z-index: 10;">Intensidad de Ruido</span>
+              <input type="range" min="2" max="40" value="12" id="grain-slider" class="oklch-slider" style="width: 80%; z-index: 10;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 15: Character Stagger Wave -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">15 / RIPPLE</span>
+            <button class="code-btn" data-code-id="ripple">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Ola Escalonada</h4>
+            <p class="card-desc">
+              Las letras individuales se animan de forma secuencial con retrasos calculados dinámicamente en CSS puro.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="stagger-text-container">
+              <span class="stagger-letter" style="--i:0">A</span>
+              <span class="stagger-letter" style="--i:1">E</span>
+              <span class="stagger-letter" style="--i:2">S</span>
+              <span class="stagger-letter" style="--i:3">T</span>
+              <span class="stagger-letter" style="--i:4">H</span>
+              <span class="stagger-letter" style="--i:5">E</span>
+              <span class="stagger-letter" style="--i:6">T</span>
+              <span class="stagger-letter" style="--i:7">I</span>
+              <span class="stagger-letter" style="--i:8">C</span>
+              <span class="stagger-letter" style="--i:9">S</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 16: Draggable Canvas Map -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">16 / PAN</span>
+            <button class="code-btn" data-code-id="pan">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Lienzo Infinito</h4>
+            <p class="card-desc">
+              Mapa o plano técnico interactivo que se puede arrastrar y posicionar de manera libre dentro de su contenedor de visualización.
+            </p>
+          </div>
+          <div class="demo-box" style="padding: 0;">
+            <div class="draggable-viewport" id="draggable-viewport">
+              <div class="draggable-canvas" id="draggable-canvas">
+                <div class="canvas-grid-pattern"></div>
+                <span class="canvas-marker" style="top: 20%; left: 30%;">A</span>
+                <span class="canvas-marker" style="top: 60%; left: 70%;">B</span>
+                <span class="canvas-marker" style="top: 40%; left: 80%;">C</span>
+                <span class="canvas-marker" style="top: 70%; left: 20%;">D</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 17: Lens Distortion -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">17 / DISTORT</span>
+            <button class="code-btn" data-code-id="distort">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Lente de Distorsión</h4>
+            <p class="card-desc">
+              Una mirilla de cristal de aumento que sigue al cursor y distorsiona o escala la malla cuadriculada subyacente.
+            </p>
+          </div>
+          <div class="demo-box" style="padding: 0;">
+            <div class="lens-container" id="lens-container">
+              <div class="lens-grid"></div>
+              <div class="lens-glass" id="lens-glass"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 18: Neon Glow Sequential -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">18 / FLUOR</span>
+            <button class="code-btn" data-code-id="fluor">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              CÓDIGO
+            </button>
+          </div>
+          <div>
+            <h4 class="card-title">Neon Reactivo</h4>
+            <p class="card-desc">
+              Tipografías que destellan en un tono neón fluorescente inmediatamente al contacto y se difuminan de forma fluida.
+            </p>
+          </div>
+          <div class="demo-box">
+            <div class="neon-text-container">
+              <span class="neon-letter">R</span>
+              <span class="neon-letter">E</span>
+              <span class="neon-letter">A</span>
+              <span class="neon-letter">C</span>
+              <span class="neon-letter">T</span>
+              <span class="neon-letter">I</span>
+              <span class="neon-letter">V</span>
+              <span class="neon-letter">O</span>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Card 19: Typewriter -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">19 / TYPE</span>
+            <button class="code-btn" data-code-id="typewriter"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Efecto Máquina de Escribir</h3>
+          <p class="card-desc">Texto que se escribe y se borra solo con CSS puro, sin JavaScript.</p>
+          <div class="demo-box">
+            <span class="typewriter-text">kaktus.dev_craft</span>
+          </div>
+        </div>
+
+        <!-- Card 20: Parallax Tilt Layers -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">20 / DEPTH</span>
+            <button class="code-btn" data-code-id="parallax"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Capas de Parallax</h3>
+          <p class="card-desc">Capas con profundidad distinta que reaccionan al movimiento del ratón.</p>
+          <div class="demo-box">
+            <div class="parallax-box" id="parallax-box">
+              <div class="parallax-layer parallax-l1"></div>
+              <div class="parallax-layer parallax-l2"></div>
+              <div class="parallax-layer parallax-l3">DEPTH</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 21: Morphing Blob -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">21 / MORPH</span>
+            <button class="code-btn" data-code-id="morph"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Blob Morfológico</h3>
+          <p class="card-desc">Forma orgánica que muta continuamente usando border-radius animado con CSS.</p>
+          <div class="demo-box">
+            <div class="morph-blob"></div>
+          </div>
+        </div>
+
+        <!-- Card 22: Pulse Ripple -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">22 / RIPPLE</span>
+            <button class="code-btn" data-code-id="pulse"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Onda de Pulso</h3>
+          <p class="card-desc">Efecto de onda expansiva en el punto exacto del clic, estilo Material Design.</p>
+          <div class="demo-box">
+            <button class="ripple-btn" id="ripple-btn">Haz clic aquí</button>
+          </div>
+        </div>
+
+        <!-- Card 23: Gradient Border -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">23 / CONIC</span>
+            <button class="code-btn" data-code-id="gradientBorder"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Borde Gradiente Cónico</h3>
+          <p class="card-desc">Borde animado con conic-gradient rotando 360° usando @property de CSS Houdini.</p>
+          <div class="demo-box">
+            <div class="gradient-border-box">
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-mid);">@property --angle</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 24: Skeleton Shimmer -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">24 / LOAD</span>
+            <button class="code-btn" data-code-id="skeleton"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Skeleton Shimmer</h3>
+          <p class="card-desc">Carga fantasma con efecto de brillo deslizante para estados de loading.</p>
+          <div class="demo-box">
+            <div class="skeleton-box">
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 25: Counter Animation -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">25 / COUNT</span>
+            <button class="code-btn" data-code-id="counter"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Contador Animado</h3>
+          <p class="card-desc">Números que suben de cero al valor final con easing de desaceleración.</p>
+          <div class="demo-box" style="flex-direction: column;">
+            <span class="counter-display" id="counter-val">0</span>
+            <span class="counter-label">PATRONES ACTIVOS</span>
+          </div>
+        </div>
+
+        <!-- Card 26: Flip Card 3D -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">26 / FLIP</span>
+            <button class="code-btn" data-code-id="flipCard"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Tarjeta Flip 3D</h3>
+          <p class="card-desc">Rotación 3D en eje Y al pasar el cursor, mostrando la cara trasera.</p>
+          <div class="demo-box flip-card-wrap">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">Pasa el cursor →</div>
+              <div class="flip-card-back">¡REVERSO!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 27: Elastic Pull -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">27 / ELASTIC</span>
+            <button class="code-btn" data-code-id="elastic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Tirón Elástico</h3>
+          <p class="card-desc">Slider con rebote elástico usando cubic-bezier con overshoot.</p>
+          <div class="demo-box">
+            <div class="elastic-bar" id="elastic-bar">
+              <div class="elastic-handle" id="elastic-handle"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 28: Particle Trail -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">28 / TRAIL</span>
+            <button class="code-btn" data-code-id="particles"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Estela de Partículas</h3>
+          <p class="card-desc">Puntos que siguen al cursor y se desvanecen creando una cola luminosa.</p>
+          <div class="demo-box">
+            <div class="particle-canvas" id="particle-canvas"></div>
+          </div>
+        </div>
+
+        <!-- Card 29: Text Gradient Scroll Reveal -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">29 / REVEAL</span>
+            <button class="code-btn" data-code-id="gradientReveal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Revelado por Gradiente</h3>
+          <p class="card-desc">Texto que se ilumina progresivamente al pasar el ratón de izquierda a derecha.</p>
+          <div class="demo-box">
+            <span class="gradient-reveal-text" id="gradient-reveal">Mueve el cursor →</span>
+          </div>
+        </div>
+
+        <!-- Card 30: CSS Tooltip -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">30 / TIP</span>
+            <button class="code-btn" data-code-id="tooltip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Tooltip CSS Puro</h3>
+          <p class="card-desc">Tooltip animado con flecha usando solo ::before y ::after, cero JS.</p>
+          <div class="demo-box">
+            <button class="tooltip-trigger" data-tooltip="¡Hecho con CSS puro!">Pasa el cursor</button>
+          </div>
+        </div>
+
+        <!-- Card 31: Blur Reveal -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">31 / BLUR</span>
+            <button class="code-btn" data-code-id="blurReveal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Desenfoque Revelador</h3>
+          <p class="card-desc">Contenido borroso que se enfoca al pasar el cursor. Ideal para spoilers.</p>
+          <div class="demo-box">
+            <div class="blur-reveal-box">
+              <span class="blur-reveal-content">SECRETO_OCULTO</span>
+              <span class="blur-reveal-hint">[ hover para revelar ]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 32: Orbit Rings -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">32 / ORBIT</span>
+            <button class="code-btn" data-code-id="orbit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Anillos Orbitales</h3>
+          <p class="card-desc">Sistema de órbitas concéntricas con partículas girando a velocidades distintas.</p>
+          <div class="demo-box">
+            <div class="orbit-container">
+              <div class="orbit-ring"><div class="orbit-dot"></div></div>
+              <div class="orbit-ring"><div class="orbit-dot"></div></div>
+              <div class="orbit-ring"><div class="orbit-dot"></div></div>
+              <div class="orbit-center"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 33: Masonry Layout -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">33 / MASON</span>
+            <button class="code-btn" data-code-id="masonry"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Masonry CSS Columns</h3>
+          <p class="card-desc">Layout tipo Pinterest usando CSS columns sin librerías externas.</p>
+          <div class="demo-box">
+            <div class="masonry-grid">
+              <div class="masonry-item" style="height:40px;">A</div>
+              <div class="masonry-item" style="height:60px;">B</div>
+              <div class="masonry-item" style="height:30px;">C</div>
+              <div class="masonry-item" style="height:50px;">D</div>
+              <div class="masonry-item" style="height:35px;">E</div>
+              <div class="masonry-item" style="height:55px;">F</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 34: Progress Steps -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">34 / STEPS</span>
+            <button class="code-btn" data-code-id="progressSteps"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Indicador de Pasos</h3>
+          <p class="card-desc">Stepper interactivo con transiciones para wizards y formularios multi-paso.</p>
+          <div class="demo-box" style="flex-direction: column; gap: 10px;">
+            <div class="steps-container" id="steps-container">
+              <div class="step-circle done">✓</div>
+              <div class="step-line active"></div>
+              <div class="step-circle done">✓</div>
+              <div class="step-line active"></div>
+              <div class="step-circle active">3</div>
+              <div class="step-line"></div>
+              <div class="step-circle">4</div>
+            </div>
+            <button class="glass-btn" id="step-advance" style="font-size: 10px; padding: 4px 10px;">Avanzar paso</button>
+          </div>
+        </div>
+
+        <!-- Card 35: Dot Matrix -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">35 / DOTS</span>
+            <button class="code-btn" data-code-id="dotMatrix"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Matriz de Puntos</h3>
+          <p class="card-desc">Grid reactivo donde cada punto se ilumina al pasar el cursor por encima.</p>
+          <div class="demo-box">
+            <div class="dot-matrix" id="dot-matrix"></div>
+          </div>
+        </div>
+
+        <!-- Card 36: Liquid Morph Button -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">36 / LIQUID</span>
+            <button class="code-btn" data-code-id="liquidBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Botón Líquido</h3>
+          <p class="card-desc">Fondo del botón que muta su forma al hover usando border-radius animado.</p>
+          <div class="demo-box">
+            <button class="liquid-btn">
+              <div class="liquid-btn-bg"></div>
+              Hovea el botón
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 37: Radial Menu -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">37 / RADIAL</span>
+            <button class="code-btn" data-code-id="radialMenu"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Menú Radial</h3>
+          <p class="card-desc">Menú circular que despliega opciones alrededor de un botón central con CSS transforms.</p>
+          <div class="demo-box">
+            <div class="radial-container" id="radial-menu">
+              <button class="radial-center-btn" id="radial-trigger">+</button>
+              <div class="radial-item ri-1">🏠</div>
+              <div class="radial-item ri-2">⚙️</div>
+              <div class="radial-item ri-3">📁</div>
+              <div class="radial-item ri-4">💬</div>
+              <div class="radial-item ri-5">🔔</div>
+              <div class="radial-item ri-6">👤</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 38: Noise Mesh Gradient -->
+        <div class="card card-spotlight">
+          <div class="card-header">
+            <span class="card-num">38 / MESH</span>
+            <button class="code-btn" data-code-id="noiseMesh"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> CÓDIGO</button>
+          </div>
+          <h3 class="card-title">Gradiente con Ruido</h3>
+          <p class="card-desc">Gradiente mesh animado con textura de grano SVG superpuesta en overlay.</p>
+          <div class="demo-box">
+            <div class="noise-mesh">
+              <div class="noise-mesh-bg"></div>
+              <div class="noise-mesh-grain"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      kaktus.dev · built with modern web APIs · 2026
+    </footer>
+
+  </div>
+
+  <!-- Native Popover element for card demo preview -->
+  <div class="popup-box" id="demo-popover" popover>
+    <h5 class="popup-title">¡Modal Nativo!</h5>
+    <p class="popup-text">
+      Este modal se abre y se cierra usando popovertarget. Pulsa Esc o haz clic fuera para comprobar la usabilidad por defecto.
+    </p>
+    <button class="popup-close" popovertarget="demo-popover" popovertargetaction="hide">Cerrar</button>
+  </div>
+
+  <!-- Global Code Viewer Modal -->
+  <div class="code-viewer-modal" id="code-viewer" popover>
+    <div class="code-viewer-header">
+      <h5 class="code-viewer-title" id="code-viewer-title">Código de Implementación</h5>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button class="code-copy-btn" id="code-copy-btn">Copiar</button>
+        <button class="popup-close" popovertarget="code-viewer" popovertargetaction="hide">Cerrar</button>
+      </div>
+    </div>
+    <div class="code-viewer-body">
+      <pre><code id="code-block"></code></pre>
+    </div>
+  </div>
+
+  <script>
+    // Dictionary of implementation codes for the 18 cards
+    const CODE_SNIPPETS = {
+      glow: `<!-- HTML -->
+<div class="card card-spotlight">
+  <button class="glass-btn">Pasa el cursor</button>
+</div>
+
+/* CSS */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(350px circle at var(--x, 0px) var(--y, 0px), rgba(34, 197, 94, 0.05), transparent 80%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover::before {
+  opacity: 1;
+}
+
+/* JavaScript */
+card.addEventListener('mousemove', (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  card.style.setProperty('--x', \`\${x}px\`);
+  card.style.setProperty('--y', \`\${y}px\`);
+});`,
+      height: `<!-- HTML -->
+<details>
+  <summary>Desplegar detalles</summary>
+  <div class="accordion-content">
+    <div class="accordion-content-inner">
+      <p class="accordion-text">Las transiciones CSS animan a la perfección la altura.</p>
+    </div>
+  </div>
+</details>
+
+/* CSS Grid Transition (No JS needed) */
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+details[open] .accordion-content {
+  grid-template-rows: 1fr;
+}
+.accordion-content-inner {
+  min-height: 0;
+}`,
+      portal: `<!-- HTML Popover API (No JS required for toggling/focus trap/click outside) -->
+<button popovertarget="demo-popover">Abrir Modal</button>
+
+<div class="popup-box" id="demo-popover" popover>
+  <h5>¡Modal Nativo!</h5>
+  <p>Este modal se abre y se cierra nativamente.</p>
+  <button popovertarget="demo-popover" popovertargetaction="hide">Cerrar</button>
+</div>
+
+/* CSS Backdrop blur on top layer overlay */
+.popup-box::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}`,
+      encrypt: `<!-- HTML -->
+<span id="scramble-txt">DECODE_ME</span>
+<button onclick="triggerScramble()">Desencriptar</button>
+
+/* JavaScript Scramble Class */
+class TextScramble {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  setText(newText) {
+    const oldText = this.el.innerText || '';
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => this.resolve = resolve);
+    this.queue = [];
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || '';
+      const to = newText[i] || '';
+      const start = Math.floor(Math.random() * 15);
+      const end = start + Math.floor(Math.random() * 15);
+      this.queue.push({ from, to, start, end, char: '' });
+    }
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  update() {
+    let output = '';
+    let complete = 0;
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) {
+        complete++;
+        output += to;
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.chars[Math.floor(Math.random() * this.chars.length)];
+          this.queue[i].char = char;
+        }
+        output += \`<span style="color: var(--accent); font-family: monospace;">\${char}</span>\`;
+      } else {
+        output += from;
+      }
+    }
+    this.el.innerHTML = output;
+    if (complete === this.queue.length) {
+      this.resolve();
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
+    }
+  }
+}`,
+      perspective: `<!-- HTML -->
+<div class="tilt-box-container" id="tilt-container">
+  <div class="tilt-inner" id="tilt-box">
+    <span>Inclinación 3D</span>
+  </div>
+</div>
+
+/* CSS */
+.tilt-box-container {
+  perspective: 800px;
+}
+.tilt-inner {
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+}
+
+/* JavaScript Dynamic 3D Matrix Rotation */
+tiltContainer.addEventListener('mousemove', (e) => {
+  const rect = tiltContainer.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  const calcX = -(y - rect.height / 2) / 6;
+  const calcY = (x - rect.width / 2) / 10;
+  
+  tiltBox.style.transform = \`rotateX(\${calcX}deg) rotateY(\${calcY}deg)\`;
+});
+tiltContainer.addEventListener('mouseleave', () => {
+  tiltBox.style.transform = 'rotateX(0deg) rotateY(0deg)';
+});`,
+      fluid: `<!-- HTML Switch Toggle (CSS Only elastic bounce switch) -->
+<label class="switch-container">
+  <input type="checkbox" class="switch-input">
+  <span class="switch-slider"></span>
+</label>
+
+/* CSS Bouncy Easing */
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.switch-slider:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-mid);
+  border-radius: 50%;
+  transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.switch-input:checked + .switch-slider {
+  background-color: rgba(34, 197, 94, 0.15);
+  border-color: var(--accent);
+}
+.switch-input:checked + .switch-slider:before {
+  transform: translateX(24px);
+  background-color: var(--accent);
+}`,
+      frost: `<!-- HTML Layering -->
+<div class="glass-orb-bg"></div>
+<div class="frosted-glass">FROSTED GLASS</div>
+
+/* CSS Depth and Blur Backdrop Filter */
+.glass-orb-bg {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  animation: orb-float 6s infinite alternate ease-in-out;
+}
+.frosted-glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(34, 197, 94, 0.03);
+  border: 1px solid var(--border);
+}
+@keyframes orb-float {
+  0% { transform: translate(-30px, -20px); }
+  100% { transform: translate(30px, 20px); }
+}`,
+      motion: `<!-- HTML -->
+<button class="spring-btn" id="spring-trigger">Púlsame</button>
+
+/* CSS Spring Physics Easing Keyframe Animation */
+.spring-btn.animate-spring {
+  animation: spring-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes spring-bounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.18); }
+  50% { transform: scale(0.88); }
+  70% { transform: scale(1.05); }
+  90% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}`,
+      mask: `<!-- HTML Cutout Ticket Card -->
+<div class="inverted-cutout-card">TICKET</div>
+
+/* CSS Masking (Draws inverse circles on the borders of the card) */
+.inverted-cutout-card {
+  mask: 
+    radial-gradient(circle at 0 50%, transparent 10px, #000 11px) -10px 0/100% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 10px, #000 11px) 10px 0/100% 100% no-repeat;
+  -webkit-mask: 
+    radial-gradient(circle at 0 50%, transparent 10px, #000 11px) -10px 0/100% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 10px, #000 11px) 10px 0/100% 100% no-repeat;
+  background: var(--surface);
+}`,
+      magnet: `<!-- HTML wrapper boundary & target -->
+<div class="magnetic-wrap">
+  <button class="magnetic-btn">PULL</button>
+</div>
+
+/* CSS dynamic coordinate transformations */
+.magnetic-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* JavaScript Elastic Coordinate Pull */
+wrap.addEventListener('mousemove', (e) => {
+  const rect = wrap.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  btn.style.transform = \`translate(\${x * 0.35}px, \${y * 0.35}px)\`;
+});
+wrap.addEventListener('mouseleave', () => {
+  btn.style.transform = 'translate(0px, 0px)';
+});`,
+      liquid: `<!-- HTML Gooey Blobs -->
+<div class="gooey-container">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+</div>
+
+<!-- SVG blur filter combined with color matrix matrix threshold -->
+<svg style="position: absolute; width:0; height:0;">
+  <filter id="gooey-filter">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+  </filter>
+</svg>
+
+/* CSS apply URL SVG filter */
+.gooey-container {
+  filter: url('#gooey-filter');
+}`,
+      spectrum: `<!-- HTML -->
+<div class="oklch-color-box" id="oklch-box"></div>
+<input type="range" min="0" max="360" id="oklch-slider">
+
+/* CSS */
+.oklch-color-box {
+  background: oklch(0.65 0.25 140);
+  transition: background 0.1s ease;
+}
+
+/* JavaScript Hue rotation in oklch format */
+oklchSlider.addEventListener('input', (e) => {
+  oklchBox.style.background = \`oklch(0.65 0.25 \${e.target.value})\`;
+});`,
+      track: `<!-- HTML SVG Progress Circle -->
+<svg width="80" height="80" viewBox="0 0 100 100">
+  <circle class="ring-bg" cx="50" cy="50" r="40" />
+  <circle class="ring-fg" cx="50" cy="50" r="40" id="scroll-ring-circle" />
+</svg>
+<div id="ring-percent">0%</div>
+
+/* CSS Dash offset configurations */
+.ring-fg {
+  stroke-dasharray: 251.2;
+  stroke-dashoffset: 251.2;
+}
+
+/* JavaScript Scroll Percentage calculation mapping */
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+  const offset = 251.2 - (251.2 * pct) / 100;
+  ringCircle.style.strokeDashoffset = offset;
+  ringPercent.textContent = \`\${pct}%\`;
+});`,
+      grain: `<!-- HTML -->
+<div class="grain-container">
+  <div class="grain-overlay" id="grain-overlay"></div>
+  <input type="range" min="2" max="40" id="grain-slider">
+</div>
+
+/* CSS Animated SVG Noise Texture shifting */
+.grain-overlay {
+  position: absolute;
+  inset: -200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  animation: grain-dance 8s steps(10) infinite;
+}
+@keyframes grain-dance {
+  0%, 100% { transform:translate(0, 0); }
+  10% { transform:translate(-5%, -10%); }
+  50% { transform:translate(-5%, 10%); }
+}
+
+/* JavaScript Opacity binding */
+grainSlider.addEventListener('input', (e) => {
+  grainOverlay.style.opacity = e.target.value / 100;
+});`,
+      ripple: `<!-- HTML Letter staggered delays -->
+<div class="stagger-text-container">
+  <span class="stagger-letter" style="--i:0">A</span>
+  <span class="stagger-letter" style="--i:1">E</span>
+  <span class="stagger-letter" style="--i:2">S</span>
+</div>
+
+/* CSS dynamic delays based on variables index CSS */
+.stagger-letter {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition-delay: calc(var(--i) * 0.04s);
+}
+.stagger-text-container:hover .stagger-letter {
+  transform: translateY(-8px);
+  color: var(--accent);
+}`,
+      pan: `<!-- HTML viewport clipping -->
+<div class="draggable-viewport" id="draggable-viewport">
+  <div class="draggable-canvas" id="draggable-canvas">
+    <div class="canvas-grid-pattern"></div>
+  </div>
+</div>
+
+/* CSS translate properties mapping */
+.draggable-canvas {
+  width: 400px;
+  height: 400px;
+  transform: translate3d(0,0,0);
+}
+
+/* JavaScript Grab-to-Drag coordinate mapping */
+viewport.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX - canvasX;
+  startY = e.clientY - canvasY;
+});
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  canvasX = e.clientX - startX;
+  canvasY = e.clientY - startY;
+  canvas.style.transform = \`translate3d(\${canvasX}px, \${canvasY}px, 0)\`;
+});
+document.addEventListener('mouseup', () => { isDragging = false; });`,
+      distort: `<!-- HTML Lens Container -->
+<div class="lens-container" id="lens-container">
+  <div class="lens-grid"></div>
+  <div class="lens-glass" id="lens-glass"></div>
+</div>
+
+/* CSS backdrop blur zoom filter overlay */
+.lens-glass {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  backdrop-filter: blur(0.5px) scale(1.3);
+  transform: translate(-50%, -50%);
+}
+
+/* JavaScript Track Mouse coordinates within bounds */
+lensContainer.addEventListener('mousemove', (e) => {
+  const rect = lensContainer.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  lensGlass.style.display = 'block';
+  lensGlass.style.left = \`\${x}px\`;
+  lensGlass.style.top = \`\${y}px\`;
+});`,
+      fluor: `<!-- HTML Letter list -->
+<div class="neon-text-container">
+  <span class="neon-letter">R</span>
+  <span class="neon-letter">E</span>
+</div>
+
+/* CSS Neon glow transition trigger */
+.neon-letter {
+  color: var(--text-faint);
+  transition: color 0.12s, text-shadow 0.12s;
+}
+.neon-letter:hover {
+  color: var(--accent);
+  text-shadow: 
+    0 0 5px var(--accent),
+    0 0 10px var(--accent),
+    0 0 20px var(--accent);
+  transition: 0s;
+}`,
+      typewriter: `<!-- HTML -->
+<div class="typewriter-container">
+  <span class="typewriter-text">kaktus.dev_craft</span>
+</div>
+
+/* CSS */
+.typewriter-text {
+  font-family: monospace;
+  border-right: 2px solid var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 2.5s steps(18) infinite, blink 0.6s step-end infinite alternate;
+  width: 18ch;
+}
+@keyframes typing {
+  0%,100% { width: 0; }
+  50% { width: 18ch; }
+}
+@keyframes blink {
+  50% { border-color: transparent; }
+}`,
+      parallax: `<!-- HTML -->
+<div class="parallax-box" id="parallax-box">
+  <div class="parallax-layer parallax-l1"></div>
+  <div class="parallax-layer parallax-l2"></div>
+  <div class="parallax-layer parallax-l3">DEPTH</div>
+</div>
+
+/* CSS */
+.parallax-box {
+  perspective: 600px;
+  position: relative;
+}
+.parallax-layer {
+  position: absolute;
+  transition: transform 0.15s ease-out;
+}
+
+/* JavaScript */
+const box = document.getElementById('parallax-box');
+const l1 = box.querySelector('.parallax-l1');
+const l2 = box.querySelector('.parallax-l2');
+const l3 = box.querySelector('.parallax-l3');
+
+box.addEventListener('mousemove', (e) => {
+  const rect = box.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  l1.style.transform = \`translate(\${x * 0.05}px, \${y * 0.05}px)\`;
+  l2.style.transform = \`translate(\${x * 0.1}px, \${y * 0.1}px)\`;
+  l3.style.transform = \`translate(\${x * 0.15}px, \${y * 0.15}px)\`;
+});`,
+      morph: `<!-- HTML -->
+<div class="morph-blob"></div>
+
+/* CSS Organic Blob Morphing */
+.morph-blob {
+  width: 70px;
+  height: 70px;
+  background: var(--accent);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morph-shape 6s ease-in-out infinite;
+}
+@keyframes morph-shape {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+}`,
+      pulse: `<!-- HTML -->
+<button class="ripple-btn" id="ripple-btn">Haz clic</button>
+
+/* CSS Ripple circle placement */
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.3);
+  transform: scale(0);
+  animation: ripple-expand 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-expand {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* JavaScript */
+btn.addEventListener('click', (e) => {
+  const circle = document.createElement('div');
+  circle.classList.add('ripple-circle');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  circle.style.width = circle.style.height = \`\${size}px\`;
+  circle.style.left = \`\${e.clientX - rect.left - size/2}px\`;
+  circle.style.top = \`\${e.clientY - rect.top - size/2}px\`;
+  btn.appendChild(circle);
+  setTimeout(() => circle.remove(), 600);
+});`,
+      gradientBorder: `<!-- HTML -->
+<div class="gradient-border-box">CONIC</div>
+
+/* CSS Conic Gradient border animation with Houdini */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.gradient-border-box::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  z-index: -1;
+  background: conic-gradient(from var(--angle, 0deg), var(--accent), #a855f7, #f43f5e, var(--accent));
+  animation: rotate-gradient 3s linear infinite;
+}
+@keyframes rotate-gradient {
+  to { --angle: 360deg; }
+}`,
+      skeleton: `<!-- HTML -->
+<div class="skeleton-box">
+  <div class="skeleton-line"></div>
+</div>
+
+/* CSS Linear Gradient shimmer */
+.skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hi) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}`,
+      counter: `<!-- HTML -->
+<span class="counter-display" id="counter-val">0</span>
+
+/* JavaScript Counter Easing animation */
+function animateCounter(target) {
+  let current = 0;
+  const duration = 1500;
+  const stepTime = 30;
+  const steps = duration / stepTime;
+  const increment = target / steps;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      el.textContent = target;
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(current);
+    }
+  }, stepTime);
+}`,
+      flipCard: `<!-- HTML -->
+<div class="flip-card-wrap">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">Frente</div>
+    <div class="flip-card-back">Atrás</div>
+  </div>
+</div>
+
+/* CSS 3D Card rotation */
+.flip-card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.flip-card-wrap:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-card-front, .flip-card-back {
+  backface-visibility: hidden;
+}`,
+      elastic: `<!-- HTML Slider track -->
+<div class="elastic-bar" id="elastic-bar">
+  <div class="elastic-handle" id="elastic-handle"></div>
+</div>
+
+/* CSS Easing handle transition */
+.elastic-handle {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* JavaScript Mouse coords mapping and rebound */
+elasticBar.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  updateElastic(e);
+});
+document.addEventListener('mouseup', () => {
+  if (isDragging) {
+    isDragging = false;
+    handle.style.left = '50%';
+  }
+});`,
+      particles: `<!-- HTML -->
+<div class="particle-canvas" id="particle-canvas"></div>
+
+/* CSS dots absolute trail fading */
+.trail-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  transition: opacity 0.5s;
+}
+
+/* JavaScript Trail generation and removal */
+canvas.addEventListener('mousemove', (e) => {
+  const dot = document.createElement('div');
+  dot.classList.add('trail-dot');
+  dot.style.left = \`\${e.clientX - rect.left}px\`;
+  dot.style.top = \`\${e.clientY - rect.top}px\`;
+  canvas.appendChild(dot);
+  setTimeout(() => {
+    dot.style.opacity = '0';
+    setTimeout(() => dot.remove(), 500);
+  }, 50);
+});`,
+      gradientReveal: `<!-- HTML -->
+<span class="gradient-reveal-text" id="gradient-reveal">Mueve el cursor</span>
+
+/* CSS Background Clip */
+.gradient-reveal-text {
+  background: linear-gradient(90deg, var(--accent) var(--reveal, 0%), var(--text-faint) var(--reveal, 0%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* JavaScript X Coordinate reveal mapping */
+text.addEventListener('mousemove', (e) => {
+  const rect = text.getBoundingClientRect();
+  const pct = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
+  text.style.setProperty('--reveal', \`\${pct}%\`);
+});`,
+      tooltip: `<!-- HTML Pure CSS tooltip -->
+<button class="tooltip-trigger" data-tooltip="Mensaje">Tooltip</button>
+
+/* CSS Tooltip and pseudo-elements placement */
+.tooltip-trigger::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tooltip-trigger:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}`,
+      blurReveal: `<!-- HTML hover to blur -->
+<div class="blur-reveal-box">
+  <span class="blur-reveal-content">SECRETO</span>
+</div>
+
+/* CSS Filter blur transition */
+.blur-reveal-content {
+  filter: blur(8px);
+  transition: filter 0.4s ease;
+}
+.blur-reveal-box:hover .blur-reveal-content {
+  filter: blur(0px);
+}`,
+      orbit: `<!-- HTML concentric tracks -->
+<div class="orbit-container">
+  <div class="orbit-ring"><div class="orbit-dot"></div></div>
+  <div class="orbit-center"></div>
+</div>
+
+/* CSS Spin infinite rotate */
+.orbit-ring {
+  animation: orbit-spin 4s linear infinite;
+}
+@keyframes orbit-spin {
+  to { transform: rotate(360deg); }
+}`,
+      masonry: `<!-- HTML layout columns -->
+<div class="masonry-grid">
+  <div class="masonry-item">Item 1</div>
+  <div class="masonry-item">Item 2</div>
+</div>
+
+/* CSS column count configuration */
+.masonry-grid {
+  columns: 2;
+  column-gap: 8px;
+}
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 8px;
+}`,
+      progressSteps: `<!-- HTML multi steps -->
+<div class="steps-container" id="steps-container">
+  <div class="step-circle active">1</div>
+  <div class="step-line"></div>
+  <div class="step-circle">2</div>
+</div>
+
+/* CSS Stepper transitions */
+.step-circle.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.step-circle.done {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* JavaScript Increment steps */
+advanceBtn.addEventListener('click', () => {
+  currentStep = (currentStep + 1) % total;
+  updateStepsUI();
+});`,
+      dotMatrix: `<!-- HTML Grid placeholder -->
+<div class="dot-matrix" id="dot-matrix"></div>
+
+/* CSS cells zoom effect */
+.dot-cell {
+  width: 8px;
+  height: 8px;
+  background: var(--border);
+  transition: background 0.15s, transform 0.15s;
+}
+.dot-cell:hover {
+  background: var(--accent);
+  transform: scale(1.8);
+}
+
+/* JavaScript Grid builder */
+for (let i = 0; i < 32; i++) {
+  const cell = document.createElement('div');
+  cell.classList.add('dot-cell');
+  dotMatrix.appendChild(cell);
+}`,
+      liquidBtn: `<!-- HTML Organic border morph -->
+<button class="liquid-btn">
+  <div class="liquid-btn-bg"></div>
+  Texto
+</button>
+
+/* CSS Border radius mutation hover */
+.liquid-btn-bg {
+  border-radius: 8px;
+  transition: border-radius 0.4s ease;
+}
+.liquid-btn:hover .liquid-btn-bg {
+  border-radius: 50% 20% 40% 30% / 40% 50% 30% 60%;
+}`,
+      radialMenu: `<!-- HTML Central trigger and child items -->
+<div class="radial-container" id="radial-menu">
+  <button class="radial-center-btn" id="radial-trigger">+</button>
+  <div class="radial-item ri-1">🏠</div>
+</div>
+
+/* CSS Translate translation positions open */
+.radial-container.open .ri-1 {
+  transform: translate(-50%, -50%) translate(0, -36px);
+}
+
+/* JavaScript Toggle open state */
+trigger.addEventListener('click', (e) => {
+  e.stopPropagation();
+  menu.classList.toggle('open');
+});`,
+      noiseMesh: `<!-- HTML noise texture SVG overlay -->
+<div class="noise-mesh">
+  <div class="noise-mesh-bg"></div>
+  <div class="noise-mesh-grain"></div>
+</div>
+
+/* CSS Mesh background animation flow */
+.noise-mesh-bg {
+  background: linear-gradient(135deg, #22c55e, #a855f7, #f43f5e);
+  background-size: 300% 300%;
+  animation: mesh-flow 6s ease infinite;
+}
+.noise-mesh-grain {
+  background-image: url("data:image/svg+xml,...");
+  mix-blend-mode: overlay;
+}`
+    };
+
+    // Custom Code syntax highlighter (HTML, CSS, JS regex replacement)
+    function highlightCode(code) {
+      const tokens = [];
+
+      // Helper: safely escape HTML entities in matched text
+      function esc(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      // Work on raw text directly (CODE_SNIPPETS are raw strings)
+      let temp = code;
+
+      // 1. Extract HTML Comments <!-- ... -->
+      temp = temp.replace(/(<!--[\s\S]*?-->)/g, (m) => {
+        const id = `\x00CM${tokens.length}\x00`;
+        tokens.push(`<span class="hl-comm">${esc(m)}</span>`);
+        return id;
+      });
+
+      // 2. Extract JS/CSS block & line comments
+      temp = temp.replace(/(\/\*[\s\S]*?\*\/|(?<!:)\/\/.+$)/gm, (m) => {
+        const id = `\x00CM${tokens.length}\x00`;
+        tokens.push(`<span class="hl-comm">${esc(m)}</span>`);
+        return id;
+      });
+
+      // 3. Extract strings (double, single, backtick)
+      temp = temp.replace(/(["'`])(?:(?!\1).)*\1/g, (m) => {
+        const id = `\x00ST${tokens.length}\x00`;
+        tokens.push(`<span class="hl-str">${esc(m)}</span>`);
+        return id;
+      });
+
+      // 4. Extract HTML tag openers like <div, </span
+      temp = temp.replace(/(<\/?[a-zA-Z][a-zA-Z0-9:-]*)/g, (m) => {
+        const id = `\x00TG${tokens.length}\x00`;
+        tokens.push(`<span class="hl-tag">${esc(m)}</span>`);
+        return id;
+      });
+
+      // 5. Extract tag closing >
+      temp = temp.replace(/>/g, (m) => {
+        const id = `\x00GT${tokens.length}\x00`;
+        tokens.push('&gt;');
+        return id;
+      });
+
+      // 6. Extract HTML/CSS attributes (word=)
+      temp = temp.replace(/\b([a-zA-Z][a-zA-Z0-9:-]*)=/g, (m, p1) => {
+        const id = `\x00AT${tokens.length}\x00`;
+        tokens.push(`<span class="hl-attr">${esc(p1)}</span>=`);
+        return id;
+      });
+
+      // 7. Extract JS Keywords
+      temp = temp.replace(/\b(const|let|var|function|return|class|constructor|document|window|addEventListener|style|transform|this|new|Promise|resolve|Math|cancelAnimationFrame|requestAnimationFrame)\b/g, (m) => {
+        const id = `\x00KW${tokens.length}\x00`;
+        tokens.push(`<span class="hl-key">${m}</span>`);
+        return id;
+      });
+
+      // 8. Escape everything that remains (plain text, CSS props, punctuation)
+      temp = esc(temp);
+
+      // 9. Restore all tokens (they already contain safe HTML)
+      for (let i = tokens.length - 1; i >= 0; i--) {
+        // Use split+join for reliability (no regex special chars issue)
+        const placeholder = `\x00CM${i}\x00`;
+        if (temp.includes(placeholder)) { temp = temp.split(placeholder).join(tokens[i]); continue; }
+        const placeholder2 = `\x00ST${i}\x00`;
+        if (temp.includes(placeholder2)) { temp = temp.split(placeholder2).join(tokens[i]); continue; }
+        const placeholder3 = `\x00TG${i}\x00`;
+        if (temp.includes(placeholder3)) { temp = temp.split(placeholder3).join(tokens[i]); continue; }
+        const placeholder4 = `\x00GT${i}\x00`;
+        if (temp.includes(placeholder4)) { temp = temp.split(placeholder4).join(tokens[i]); continue; }
+        const placeholder5 = `\x00AT${i}\x00`;
+        if (temp.includes(placeholder5)) { temp = temp.split(placeholder5).join(tokens[i]); continue; }
+        const placeholder6 = `\x00KW${i}\x00`;
+        if (temp.includes(placeholder6)) { temp = temp.split(placeholder6).join(tokens[i]); continue; }
+      }
+
+      return temp;
+    }
+
+    // Code viewer modal element bindings
+    const codeViewer = document.getElementById('code-viewer');
+    const codeBlock = document.getElementById('code-block');
+    const codeTitle = document.getElementById('code-viewer-title');
+    const codeCopyBtn = document.getElementById('code-copy-btn');
+    let activeCodeText = "";
+
+    document.querySelectorAll('.code-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-code-id');
+        const code = CODE_SNIPPETS[id];
+        if (code) {
+          activeCodeText = code;
+          codeBlock.innerHTML = highlightCode(code);
+          const cardTitle = btn.closest('.card').querySelector('.card-title').textContent;
+          codeTitle.textContent = `Código: ${cardTitle}`;
+          codeCopyBtn.textContent = "Copiar";
+          codeViewer.showPopover();
+        }
+      });
+    });
+
+    // Hide/show custom cursor when popovers open/close
+    codeViewer.addEventListener('toggle', (e) => {
+      document.body.classList.toggle('popover-active', e.newState === 'open');
+    });
+    const demoPopover = document.getElementById('demo-popover');
+    demoPopover.addEventListener('toggle', (e) => {
+      document.body.classList.toggle('popover-active', e.newState === 'open');
+    });
+
+    // Copy to clipboard functionality
+    codeCopyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(activeCodeText).then(() => {
+        codeCopyBtn.textContent = "¡Copiado!";
+        setTimeout(() => {
+          codeCopyBtn.textContent = "Copiar";
+        }, 1500);
+      });
+    });
+
+    // Custom cursor tracker
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Spotlight card hover effect for all cards
+    const cards = document.querySelectorAll('.card-spotlight');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--x', `${x}px`);
+        card.style.setProperty('--y', `${y}px`);
+      });
+    });
+
+    // 3D Tilt Card effect
+    const tiltContainer = document.getElementById('tilt-container');
+    const tiltBox = document.getElementById('tilt-box');
+    tiltContainer.addEventListener('mousemove', (e) => {
+      const rect = tiltContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const calcX = -(y - rect.height / 2) / 6;
+      const calcY = (x - rect.width / 2) / 10;
+      
+      tiltBox.style.transform = `rotateX(${calcX}deg) rotateY(${calcY}deg)`;
+    });
+    tiltContainer.addEventListener('mouseleave', () => {
+      tiltBox.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+
+    // Text Scramble Class & Trigger
+    class TextScramble {
+      constructor(el) {
+        this.el = el;
+        this.chars = '!<>-_\\/[]{}—=+*^?#________';
+        this.update = this.update.bind(this);
+      }
+      setText(newText) {
+        const oldText = this.el.innerText || '';
+        const length = Math.max(oldText.length, newText.length);
+        const promise = new Promise((resolve) => this.resolve = resolve);
+        this.queue = [];
+        for (let i = 0; i < length; i++) {
+          const from = oldText[i] || '';
+          const to = newText[i] || '';
+          const start = Math.floor(Math.random() * 15);
+          const end = start + Math.floor(Math.random() * 15);
+          this.queue.push({ from, to, start, end, char: '' });
+        }
+        cancelAnimationFrame(this.frameRequest);
+        this.frame = 0;
+        this.update();
+        return promise;
+      }
+      update() {
+        let output = '';
+        let complete = 0;
+        for (let i = 0, n = this.queue.length; i < n; i++) {
+          let { from, to, start, end, char } = this.queue[i];
+          if (this.frame >= end) {
+            complete++;
+            output += to;
+          } else if (this.frame >= start) {
+            if (!char || Math.random() < 0.28) {
+              char = this.randomChar();
+              this.queue[i].char = char;
+            }
+            output += `<span style="color: var(--accent); font-family: var(--font-mono);">${char}</span>`;
+          } else {
+            output += from;
+          }
+        }
+        this.el.innerHTML = output;
+        if (complete === this.queue.length) {
+          this.resolve();
+        } else {
+          this.frameRequest = requestAnimationFrame(this.update);
+          this.frame++;
+        }
+      }
+      randomChar() {
+        return this.chars[Math.floor(Math.random() * this.chars.length)];
+      }
+    }
+
+    const scrambleTxtEl = document.getElementById('scramble-txt');
+    const scrambler = new TextScramble(scrambleTxtEl);
+    const phrases = ['KAKTUS_CRAFT', 'DESIGN_AESTHETICS', 'PERFORMANCE_FIRST', 'ZERO_JS_ACCORDIONS', 'DECODE_COMPLETE'];
+    let phraseIdx = 0;
+
+    function triggerScramble() {
+      scrambler.setText(phrases[phraseIdx]);
+      phraseIdx = (phraseIdx + 1) % phrases.length;
+    }
+
+    // Spring Bouncy button animation trigger
+    const springTrigger = document.getElementById('spring-trigger');
+    springTrigger.addEventListener('click', () => {
+      springTrigger.classList.add('animate-spring');
+      setTimeout(() => {
+        springTrigger.classList.remove('animate-spring');
+      }, 600);
+    });
+
+    // Theme Toggle Handler
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = 'THEME: DARK';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = 'THEME: LIGHT';
+      }
+    });
+
+    // Magnetic elements tracker
+    const magneticWraps = document.querySelectorAll('.magnetic-wrap');
+    magneticWraps.forEach(wrap => {
+      const btn = wrap.querySelector('.magnetic-btn');
+      wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.35}px, ${y * 0.35}px)`;
+      });
+      wrap.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0px, 0px)';
+      });
+    });
+
+    // OkLch slider controller
+    const oklchSlider = document.getElementById('oklch-slider');
+    const oklchBox = document.getElementById('oklch-box');
+    oklchSlider.addEventListener('input', (e) => {
+      oklchBox.style.background = `oklch(0.65 0.25 ${e.target.value})`;
+    });
+
+    // Scroll-driven progress ring percentage calculation
+    const ringCircle = document.getElementById('scroll-ring-circle');
+    const ringPercent = document.getElementById('ring-percent');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+      const offset = 251.2 - (251.2 * pct) / 100;
+      ringCircle.style.strokeDashoffset = offset;
+      ringPercent.textContent = `${pct}%`;
+    });
+
+    // Analog film noise controller
+    const grainSlider = document.getElementById('grain-slider');
+    const grainOverlay = document.getElementById('grain-overlay');
+    grainSlider.addEventListener('input', (e) => {
+      grainOverlay.style.opacity = e.target.value / 100;
+    });
+
+    // Infinite Canvas Draggable implementation
+    const viewport = document.getElementById('draggable-viewport');
+    const canvas = document.getElementById('draggable-canvas');
+    let isDragging = false;
+    let startX, startY;
+    let canvasX = -140, canvasY = -140;
+
+    viewport.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - canvasX;
+      startY = e.clientY - canvasY;
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      canvasX = e.clientX - startX;
+      canvasY = e.clientY - startY;
+      // Clamping limits
+      canvasX = Math.max(-280, Math.min(0, canvasX));
+      canvasY = Math.max(-280, Math.min(0, canvasY));
+      canvas.style.transform = `translate3d(${canvasX}px, ${canvasY}px, 0)`;
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Dynamic Lens Glass positioning
+    const lensContainer = document.getElementById('lens-container');
+    const lensGlass = document.getElementById('lens-glass');
+    lensContainer.addEventListener('mousemove', (e) => {
+      const rect = lensContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      lensGlass.style.display = 'block';
+      lensGlass.style.left = `${x}px`;
+      lensGlass.style.top = `${y}px`;
+    });
+    lensContainer.addEventListener('mouseleave', () => {
+      lensGlass.style.display = 'none';
+    });
+
+    // --- Interactive JavaScript for Cards 19-38 ---
+
+    // Card 20: Parallax Tilt Layers
+    const parallaxBox = document.getElementById('parallax-box');
+    const pL1 = parallaxBox.querySelector('.parallax-l1');
+    const pL2 = parallaxBox.querySelector('.parallax-l2');
+    const pL3 = parallaxBox.querySelector('.parallax-l3');
+    parallaxBox.addEventListener('mousemove', (e) => {
+      const rect = parallaxBox.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      pL1.style.transform = `translate(${x * 0.05}px, ${y * 0.05}px)`;
+      pL2.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+      pL3.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+    });
+    parallaxBox.addEventListener('mouseleave', () => {
+      pL1.style.transform = '';
+      pL2.style.transform = '';
+      pL3.style.transform = '';
+    });
+
+    // Card 22: Pulse Ripple
+    const rippleBtn = document.getElementById('ripple-btn');
+    rippleBtn.addEventListener('click', (e) => {
+      const circle = document.createElement('div');
+      circle.classList.add('ripple-circle');
+      const rect = rippleBtn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      circle.style.width = circle.style.height = `${size}px`;
+      circle.style.left = `${e.clientX - rect.left - size/2}px`;
+      circle.style.top = `${e.clientY - rect.top - size/2}px`;
+      
+      const prev = rippleBtn.querySelector('.ripple-circle');
+      if (prev) prev.remove();
+      
+      rippleBtn.appendChild(circle);
+      setTimeout(() => circle.remove(), 600);
+    });
+
+    // Card 25: Counter Animation
+    const counterVal = document.getElementById('counter-val');
+    function animateCounter(target) {
+      let current = 0;
+      const duration = 1200; // ms
+      const stepTime = 30;
+      const steps = duration / stepTime;
+      const increment = target / steps;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          counterVal.textContent = target;
+          clearInterval(timer);
+        } else {
+          counterVal.textContent = Math.floor(current);
+        }
+      }, stepTime);
+    }
+    // Initial run
+    animateCounter(38);
+    // Re-trigger on hover
+    counterVal.closest('.card').addEventListener('mouseenter', () => {
+      animateCounter(38);
+    });
+
+    // Card 27: Elastic Pull Slider
+    const elasticBar = document.getElementById('elastic-bar');
+    const elasticHandle = document.getElementById('elastic-handle');
+    let isDraggingElastic = false;
+    
+    elasticBar.addEventListener('mousedown', (e) => {
+      isDraggingElastic = true;
+      updateElastic(e);
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDraggingElastic) return;
+      updateElastic(e);
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (isDraggingElastic) {
+        isDraggingElastic = false;
+        elasticHandle.style.left = '50%';
+      }
+    });
+    
+    function updateElastic(e) {
+      const rect = elasticBar.getBoundingClientRect();
+      let pos = ((e.clientX - rect.left) / rect.width) * 100;
+      pos = Math.max(0, Math.min(100, pos));
+      elasticHandle.style.left = `${pos}%`;
+    }
+
+    // Card 28: Particle Trail
+    const particleCanvas = document.getElementById('particle-canvas');
+    particleCanvas.addEventListener('mousemove', (e) => {
+      const rect = particleCanvas.getBoundingClientRect();
+      const dot = document.createElement('div');
+      dot.classList.add('trail-dot');
+      dot.style.left = `${e.clientX - rect.left - 3}px`;
+      dot.style.top = `${e.clientY - rect.top - 3}px`;
+      dot.style.opacity = '1';
+      particleCanvas.appendChild(dot);
+      setTimeout(() => {
+        dot.style.opacity = '0';
+        setTimeout(() => dot.remove(), 500);
+      }, 50);
+    });
+
+    // Card 29: Text Gradient Scroll Reveal
+    const gradientReveal = document.getElementById('gradient-reveal');
+    gradientReveal.closest('.card').addEventListener('mousemove', (e) => {
+      const rect = gradientReveal.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      gradientReveal.style.setProperty('--reveal', `${pct}%`);
+    });
+    gradientReveal.closest('.card').addEventListener('mouseleave', () => {
+      gradientReveal.style.setProperty('--reveal', '0%');
+    });
+
+    // Card 34: Progress Steps Stepper
+    const stepAdvance = document.getElementById('step-advance');
+    const stepCircles = document.querySelectorAll('#steps-container .step-circle');
+    const stepLines = document.querySelectorAll('#steps-container .step-line');
+    let currentStep = 2; // starting step 3 (0-indexed)
+    
+    stepAdvance.addEventListener('click', () => {
+      currentStep = (currentStep + 1) % 4;
+      stepCircles.forEach((circle, idx) => {
+        circle.className = 'step-circle';
+        if (idx < currentStep) {
+          circle.classList.add('done');
+          circle.textContent = '✓';
+        } else if (idx === currentStep) {
+          circle.classList.add('active');
+          circle.textContent = idx + 1;
+        } else {
+          circle.textContent = idx + 1;
+        }
+      });
+      stepLines.forEach((line, idx) => {
+        line.className = 'step-line';
+        if (idx < currentStep) {
+          line.classList.add('active');
+        }
+      });
+    });
+
+    // Card 35: Dot Matrix Builder
+    const dotMatrix = document.getElementById('dot-matrix');
+    if (dotMatrix) {
+      for (let i = 0; i < 32; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('dot-cell');
+        dotMatrix.appendChild(cell);
+      }
+    }
+
+    // Card 37: Radial Menu Toggle
+    const radialMenu = document.getElementById('radial-menu');
+    const radialTrigger = document.getElementById('radial-trigger');
+    radialTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      radialMenu.classList.toggle('open');
+      radialTrigger.textContent = radialMenu.classList.contains('open') ? '×' : '+';
+    });
+    document.addEventListener('click', () => {
+      radialMenu.classList.remove('open');
+      radialTrigger.textContent = '+';
+    });
+  </script>
+</body>
+</html>
