@@ -1330,88 +1330,7 @@
       box-shadow: 0 6px 18px var(--accent-glow);
     }
 
-    /* Newsletter Section */
-    .newsletter-section {
-      padding: 5rem 2rem;
-      border-top: 1px solid var(--border);
-      background: #090d16;
-      display: flex;
-      justify-content: center;
-    }
-    .newsletter-box {
-      max-width: 600px;
-      width: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 100%);
-      border: 1px solid var(--border);
-      padding: 3rem;
-      border-radius: 20px;
-      text-align: center;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      position: relative;
-    }
-    .newsletter-box h3 {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin-bottom: 0.75rem;
-    }
-    .newsletter-box p {
-      color: var(--text-mid);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      line-height: 1.5;
-    }
-    .newsletter-form {
-      display: flex;
-      gap: 10px;
-    }
-    .newsletter-input {
-      flex-grow: 1;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 16px;
-      color: var(--text);
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .newsletter-input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-    .newsletter-btn {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      padding: 0 24px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .newsletter-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
-    .newsletter-status {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      font-family: var(--font-mono);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .newsletter-status.success {
-      color: var(--accent);
-    }
-    .newsletter-status.error {
-      color: #f43f5e;
-    }
+
 
     /* Code Viewer PRO Upgrade Button */
     .pro-upgrade-btn {
@@ -1439,13 +1358,6 @@
     @media (max-width: 768px) {
       .pricing-grid {
         grid-template-columns: 1fr;
-      }
-      .newsletter-form {
-        flex-direction: column;
-      }
-      .newsletter-btn {
-        width: 100%;
-        padding: 12px 0;
       }
     }
   </style>
@@ -2354,21 +2266,8 @@
               15+ Advanced Premium animations
             </li>
           </ul>
-          <a href="https://zaswear.lemonsqueezy.com/checkout/buy/kaktus-pro-placeholder" target="_blank" class="pricing-btn btn-primary">Upgrade to PRO</a>
+          <a href="https://ko-fi.com/zaswear" target="_blank" class="pricing-btn btn-primary">Upgrade to PRO (via Ko-fi)</a>
         </div>
-      </div>
-    </section>
-
-    <!-- Newsletter Section -->
-    <section class="newsletter-section">
-      <div class="newsletter-box">
-        <h3>Join the CSS Motion Newsletter</h3>
-        <p>Get two advanced, native CSS and web interaction components delivered to your inbox every week. Zero bloat, pure inspiration.</p>
-        <form class="newsletter-form" id="newsletter-form" onsubmit="event.preventDefault();">
-          <input type="email" placeholder="Enter your email address" required class="newsletter-input" id="newsletter-email">
-          <button type="submit" class="newsletter-btn" id="newsletter-submit-btn">Subscribe Free</button>
-        </form>
-        <div class="newsletter-status" id="newsletter-status"></div>
       </div>
     </section>
 
@@ -3714,42 +3613,6 @@ trigger.addEventListener('click', (e) => {
       radialMenu.classList.remove('open');
       radialTrigger.textContent = '+';
     });
-    // Newsletter signup interactive simulation
-    const newsletterForm = document.getElementById('newsletter-form');
-    const newsletterEmail = document.getElementById('newsletter-email');
-    const newsletterSubmit = document.getElementById('newsletter-submit-btn');
-    const newsletterStatus = document.getElementById('newsletter-status');
-
-    if (newsletterForm) {
-      newsletterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = newsletterEmail.value.trim();
-        
-        // Simple regex verification
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          showStatus('Please enter a valid email address.', 'error');
-          return;
-        }
-
-        // Simulating network request state
-        newsletterSubmit.disabled = true;
-        newsletterEmail.disabled = true;
-        showStatus('Subscribing...', 'success');
-
-        setTimeout(() => {
-          newsletterSubmit.disabled = false;
-          newsletterEmail.disabled = false;
-          newsletterEmail.value = '';
-          showStatus('✓ Thank you! Please check your inbox to confirm.', 'success');
-        }, 1500);
-      });
-    }
-
-    function showStatus(msg, type) {
-      newsletterStatus.textContent = msg;
-      newsletterStatus.className = `newsletter-status ${type}`;
-      newsletterStatus.style.display = 'flex';
-    }
   </script>
 </body>
 </html>
