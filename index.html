@@ -1193,150 +1193,86 @@
 
     /* --- Monetization & Marketing Layout --- */
     
-    /* Pricing Section */
-    .pricing-section {
+    /* Support & Donations Section */
+    .support-section {
       padding: 6rem 2rem;
       border-top: 1px solid var(--border);
       position: relative;
       background: radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), 0.03), transparent 70%);
     }
-    .pricing-header {
+    .support-header {
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
     }
-    .pricing-header h3 {
+    .support-header h3 {
       font-family: var(--font-display);
       font-size: 2.2rem;
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 1rem;
     }
-    .pricing-header p {
+    .support-header p {
       color: var(--text-mid);
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
       font-size: 0.95rem;
+      line-height: 1.6;
     }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-      max-width: 900px;
+    .support-card {
+      background: radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), 0.08), var(--surface) 70%);
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      max-width: 600px;
       margin: 0 auto;
-    }
-    .pricing-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      display: flex;
-      flex-direction: column;
+      text-align: center;
       position: relative;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 20px rgba(var(--accent-rgb), 0.05);
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .pricing-card:hover {
-      border-color: rgba(var(--accent-rgb), 0.3);
+    .support-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.4), 0 0 1px 1px rgba(var(--accent-rgb), 0.1);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 30px rgba(var(--accent-rgb), 0.1);
     }
-    .pricing-card.premium-tier {
-      background: radial-gradient(circle at 100% 0%, rgba(var(--accent-rgb), 0.08), var(--surface) 60%);
-      border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.05);
-    }
-    .pricing-card.premium-tier::before {
-      content: 'RECOMMENDED';
-      position: absolute;
-      top: -12px;
-      right: 24px;
-      background: var(--accent);
-      color: #000;
-      font-size: 9px;
-      font-weight: 800;
-      font-family: var(--font-mono);
-      padding: 4px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.5px;
-    }
-    .tier-name {
+    .support-card h4 {
       font-family: var(--font-display);
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
-    .tier-price {
-      margin-bottom: 1.5rem;
-    }
-    .tier-price .amount {
-      font-family: var(--font-display);
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-    .tier-price .period {
-      color: var(--text-faint);
-      font-size: 0.85rem;
-      font-family: var(--font-mono);
-    }
-    .tier-features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2.5rem 0;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-    .tier-features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
+    .support-description {
       color: var(--text-mid);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .tier-features li svg {
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-    .pricing-btn {
-      width: 100%;
-      text-align: center;
-      display: block;
-      padding: 10px 20px;
+    .support-btn {
+      display: inline-block;
+      padding: 12px 32px;
       border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.85rem;
+      font-weight: 800;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
-    }
-    .pricing-btn.btn-secondary {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .pricing-btn.btn-secondary:hover {
-      background: var(--surface-hi);
-      border-color: var(--border-hi);
-    }
-    .pricing-btn.btn-primary {
       background: var(--accent);
       color: #000;
       border: none;
       box-shadow: 0 4px 12px var(--accent-glow);
     }
-    .pricing-btn.btn-primary:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 18px var(--accent-glow);
+    .support-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px var(--accent-glow);
     }
 
-
-
-    /* Code Viewer PRO Upgrade Button */
-    .pro-upgrade-btn {
-      background: linear-gradient(135deg, #a855f7 0%, #f43f5e 100%);
-      color: #fff;
-      border: none;
+    /* Code Viewer Support Button */
+    .code-support-btn {
+      background: rgba(var(--accent-rgb), 0.1);
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
+      color: var(--accent);
       border-radius: 6px;
       padding: 5px 12px;
       font-size: 10px;
@@ -1348,17 +1284,13 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
     }
-    .pro-upgrade-btn:hover {
+    .code-support-btn:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(244, 63, 94, 0.5);
-    }
-
-    @media (max-width: 768px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
   </style>
 </head>
@@ -2195,81 +2127,20 @@
       </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section class="pricing-section" id="pricing">
-      <div class="pricing-header">
-        <h3>Choose Your License</h3>
-        <p>Start learning with our open-source templates or upgrade to the PRO suite for commercial use & framework-ready components.</p>
+    <!-- Support & Donations Section -->
+    <section class="support-section" id="support">
+      <div class="support-header">
+        <h3>Support the Project</h3>
+        <p>kaktus.dev is fully open-source and free to use. If this interactive catalog of 38 micro-interactions helps you build beautiful web designs, consider supporting the work with a donation. Your support pays for hosting and keeps the library growing!</p>
       </div>
-      <div class="pricing-grid">
-        <!-- Core Plan (Free) -->
-        <div class="pricing-card">
-          <span class="tier-name">kaktus.dev Core</span>
-          <div class="tier-price">
-            <span class="amount">$0</span>
-            <span class="period">/ forever</span>
-          </div>
-          <ul class="tier-features">
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              38 Raw HTML/CSS Interaction Cards
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Open-Source & Fully Customizable
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              MIT License for individual snippets
-            </li>
-            <li style="opacity: 0.4;">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: #f43f5e;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              No React / Tailwind components
-            </li>
-            <li style="opacity: 0.4;">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: #f43f5e;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              Non-Commercial showcase use only
-            </li>
-          </ul>
-          <a href="#showcase" class="pricing-btn btn-secondary">Explore Showcase</a>
-        </div>
-        <!-- PRO Plan ($29) -->
-        <div class="pricing-card premium-tier">
-          <span class="tier-name">kaktus.dev PRO</span>
-          <div class="tier-price">
-            <span class="amount">$29</span>
-            <span class="period">/ one-time payment</span>
-          </div>
-          <ul class="tier-features">
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Everything in Core (38 components)
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <strong>React, Next.js, and Svelte wrappers</strong>
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <strong>Tailwind CSS classes</strong> optimization
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Original Figma design files
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <strong>Unlimited Commercial License</strong>
-            </li>
-            <li>
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              15+ Advanced Premium animations
-            </li>
-          </ul>
-          <a href="https://ko-fi.com/I2I31CXQVM" target="_blank" class="pricing-btn btn-primary">Upgrade to PRO (via Ko-fi)</a>
-          <div class="kofi-widget-inline" style="margin-top: 16px; display: flex; justify-content: center; width: 100%;">
-            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'I2I31CXQVM');kofiwidget2.draw();</script>
-          </div>
+      <div class="support-card">
+        <h4>Buy me a coffee ☕</h4>
+        <p class="support-description">
+          Supporting the project helps cover hosting costs and supports the development of new patterns. Every cup helps keep the cactus green!
+        </p>
+        <a href="https://ko-fi.com/I2I31CXQVM" target="_blank" class="support-btn">Support on Ko-fi</a>
+        <div class="kofi-widget-inline" style="margin-top: 24px; display: flex; justify-content: center; width: 100%;">
+          <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#22c55e', 'I2I31CXQVM');kofiwidget2.draw();</script>
         </div>
       </div>
     </section>
@@ -2295,7 +2166,7 @@
     <div class="code-viewer-header">
       <h5 class="code-viewer-title" id="code-viewer-title">Implementation Code</h5>
       <div style="display: flex; gap: 8px; align-items: center;">
-        <a href="#pricing" class="pro-upgrade-btn" onclick="document.getElementById('code-viewer').hidePopover();">Get React / Tailwind (PRO)</a>
+        <a href="#support" class="code-support-btn" onclick="document.getElementById('code-viewer').hidePopover();">Support Project ☕</a>
         <button class="code-copy-btn" id="code-copy-btn">Copy</button>
         <button class="popup-close" popovertarget="code-viewer" popovertargetaction="hide">Close</button>
       </div>
