@@ -34,14 +34,6 @@
   <meta name="twitter:image" content="assets/og-preview.png">
 
   <title>kaktus.dev · Premium Design Craft & Web Aesthetics</title>
-  
-  <!-- Bugsnag Error & Performance Monitoring -->
-  <script src="//d2wy8f7a9ursnm.cloudfront.net/v8/bugsnag.min.js"></script>
-  <script type="module">
-    import BugsnagPerformance from '//d2wy8f7a9ursnm.cloudfront.net/v1/bugsnag-performance.min.js'
-    Bugsnag.start({ apiKey: '9a2d74449e1c978a591c3c16f97dbd9d' })
-    BugsnagPerformance.start({ apiKey: '9a2d74449e1c978a591c3c16f97dbd9d' })
-  </script>
 
   <meta name="description" content="A massive interactive showcase of premium frontend design patterns, fluid transitions and native Web APIs — without heavy dependencies.">
   <meta name="author" content="zaswear">
@@ -91,7 +83,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      cursor: none; /* Custom cursor override */
     }
 
     body {
@@ -109,6 +100,7 @@
 
     /* Custom Cursor */
     .custom-cursor {
+      display: none; /* enabled only on fine-pointer devices below */
       width: 20px;
       height: 20px;
       border: 2px solid var(--accent);
@@ -128,6 +120,52 @@
     body.popover-active .custom-cursor {
       opacity: 0;
       pointer-events: none;
+    }
+    /* Custom cursor only where a precise pointer exists (not touch) */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none; }
+      .custom-cursor { display: block; }
+    }
+
+    /* Keyboard focus visibility (custom cursor hides the native one) */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    :focus:not(:focus-visible) { outline: none; }
+
+    /* Respect users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Pause continuous demo animations while off-screen (perf) */
+    .demo-box.anim-paused,
+    .demo-box.anim-paused *,
+    .marquee.anim-paused { animation-play-state: paused !important; }
+
+    /* Deep-link: shareable pattern number + targeted-card highlight */
+    .card { scroll-margin-top: 90px; }
+    .card-num.deep-link::after {
+      content: ' #';
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .card-num.deep-link:hover::after,
+    .card-num.deep-link:focus-visible::after { opacity: 0.6; }
+    @keyframes deep-link-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.45); }
+      100% { box-shadow: 0 0 0 18px rgba(var(--accent-rgb), 0); }
+    }
+    .card.is-targeted {
+      border-color: var(--accent);
+      animation: deep-link-pulse 1.3s ease-out;
     }
 
     /* Scroll progress bar */
@@ -1456,7 +1494,7 @@
         A massive interactive showcase of modern design patterns, high-performance fluid transitions, and native Web APIs without heavy frameworks.
       </p>
       <a href="#showcase" class="cta-btn">
-        Explore 38 Patterns
+        Explore <span data-pattern-count>38</span> Patterns
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
       </a>
     </section>
@@ -2254,7 +2292,7 @@
     <section class="support-section" id="support">
       <div class="support-header">
         <h3>Support the Project</h3>
-        <p>kaktus.dev is fully open-source and free to use. If this interactive catalog of 38 micro-interactions helps you build beautiful web designs, consider supporting the work with a donation. Your support pays for hosting and keeps the library growing!</p>
+        <p>kaktus.dev is fully open-source and free to use. If this interactive catalog of <span data-pattern-count>38</span> micro-interactions helps you build beautiful web designs, consider supporting the work with a donation. Your support pays for hosting and keeps the library growing!</p>
       </div>
       <div class="support-card">
         <h4>Buy me a coffee ☕</h4>
@@ -2288,6 +2326,7 @@
       <h5 class="code-viewer-title" id="code-viewer-title">Implementation Code</h5>
       <div style="display: flex; gap: 8px; align-items: center;">
         <a href="#support" class="code-support-btn" onclick="document.getElementById('code-viewer').hidePopover();">Support Project ☕</a>
+        <button class="code-copy-btn" id="code-pen-btn" title="Open this snippet in CodePen">Open in CodePen</button>
         <button class="code-copy-btn" id="code-copy-btn">Copy</button>
         <button class="popup-close" popovertarget="code-viewer" popovertargetaction="hide">Close</button>
       </div>
@@ -2311,7 +2350,7 @@
   </button>
 
   <script>
-    // Dictionary of implementation codes for the 18 cards
+    // Dictionary of implementation snippets, keyed by pattern slug (matches data-code-id)
     const CODE_SNIPPETS = {
       glow: `<!-- HTML -->
 <div class="card card-spotlight">
@@ -3252,6 +3291,7 @@ trigger.addEventListener('click', (e) => {
     const codeCopyBtn = document.getElementById('code-copy-btn');
     const tabButtons = document.querySelectorAll('.code-tab-btn');
     let activeCodeText = "";
+    let activeCodeTitle = "";
     let activeSnippetParts = { html: '', css: '', js: '', all: '' };
 
     function renderActiveTab(tabName) {
@@ -3289,6 +3329,7 @@ trigger.addEventListener('click', (e) => {
           renderActiveTab('all');
 
           const cardTitle = btn.closest('.card').querySelector('.card-title').textContent;
+          activeCodeTitle = cardTitle;
           codeTitle.textContent = `Code: ${cardTitle}`;
           codeCopyBtn.textContent = "Copy";
           codeViewer.showPopover();
@@ -3315,12 +3356,104 @@ trigger.addEventListener('click', (e) => {
       });
     });
 
-    // Custom cursor tracker
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+    // ===== Pro enhancements: count, deep-links, CodePen, perf =====
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Single source of truth for the pattern count
+    const PATTERN_COUNT = document.querySelectorAll('#showcase .code-btn[data-code-id]').length;
+    document.querySelectorAll('[data-pattern-count]').forEach(el => {
+      el.textContent = PATTERN_COUNT;
     });
+
+    // Deep-linking: id each card from its snippet slug + make the number shareable
+    function highlightCard(card) {
+      document.querySelectorAll('.card.is-targeted').forEach(c => c.classList.remove('is-targeted'));
+      void card.offsetWidth; // restart the pulse animation
+      card.classList.add('is-targeted');
+      card.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+      setTimeout(() => card.classList.remove('is-targeted'), 1400);
+    }
+
+    document.querySelectorAll('#showcase .code-btn[data-code-id]').forEach(btn => {
+      const card = btn.closest('.card');
+      const id = btn.getAttribute('data-code-id');
+      if (!card || !id) return;
+      card.id = id;
+      const num = card.querySelector('.card-num');
+      if (!num) return;
+      num.classList.add('deep-link');
+      num.setAttribute('role', 'button');
+      num.setAttribute('tabindex', '0');
+      num.setAttribute('title', 'Copy link to this pattern');
+      const share = () => {
+        history.replaceState(null, '', '#' + id);
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).catch(() => {});
+        const prev = num.textContent;
+        num.textContent = 'LINK COPIED ✓';
+        setTimeout(() => { num.textContent = prev; }, 1200);
+        highlightCard(card);
+      };
+      num.addEventListener('click', share);
+      num.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); share(); }
+      });
+    });
+
+    function focusHashTarget() {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (!id) return;
+      const card = document.getElementById(id);
+      if (card && card.classList.contains('card')) highlightCard(card);
+    }
+    window.addEventListener('hashchange', focusHashTarget);
+    window.addEventListener('load', focusHashTarget);
+
+    // Open the active snippet in CodePen (prefill API, no dependencies)
+    const codePenBtn = document.getElementById('code-pen-btn');
+    if (codePenBtn) {
+      codePenBtn.addEventListener('click', () => {
+        const data = {
+          title: 'kaktus.dev · ' + (activeCodeTitle || 'Pattern'),
+          description: 'Pattern from kaktus.dev — ' + location.origin + location.pathname,
+          html: activeSnippetParts.html || '',
+          css: activeSnippetParts.css || '',
+          js: activeSnippetParts.js || '',
+          editors: '111'
+        };
+        const form = document.createElement('form');
+        form.action = 'https://codepen.io/pen/define';
+        form.method = 'POST';
+        form.target = '_blank';
+        form.rel = 'noopener';
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'data';
+        input.value = JSON.stringify(data);
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+        form.remove();
+      });
+    }
+
+    // Pause continuous demo animations while off-screen (perf)
+    if ('IntersectionObserver' in window) {
+      const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
+        });
+      }, { rootMargin: '120px' });
+      document.querySelectorAll('.demo-box, .marquee').forEach(el => animObserver.observe(el));
+    }
+
+    // Custom cursor tracker (precise-pointer devices only)
+    const cursor = document.getElementById('cursor');
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+    }
 
     // Spotlight card hover effect for all cards
     const cards = document.querySelectorAll('.card-spotlight');
