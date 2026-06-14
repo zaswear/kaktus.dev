@@ -1,5 +1,7 @@
 # kaktus.dev 🌵
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I31CXQVM)
+
 Un proyecto de marca personal minimalista y un catálogo interactivo masivo de patrones de diseño web modernos de alto rendimiento. Utiliza transiciones de CSS fluido y APIs nativas del navegador sin dependencias de JavaScript o frameworks pesados.
 
 ---

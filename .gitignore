@@ -1,0 +1,8 @@
+# Ignore the premium templates zip file (do not commit to public repo!)
+kaktus-pro-templates.zip
+
+# System / IDE files
+.DS_Store
+.idea/
+.vscode/
+Thumbs.db
