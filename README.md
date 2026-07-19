@@ -10,6 +10,7 @@ A premium, high-performance showcase of **38 interactive frontend design pattern
 
 ## ⚡ Core Features
 
+- **UI Lab (New):** A dedicated section with premium, interactive, ready-to-copy components (like Parallax 3D Cards, Hacker Text, and Magnetic Buttons) built purely with Vanilla CSS and JS.
 - **38 Interactive Patterns:** Handcrafted micro-interactions including 3D perspectives, custom cursors, SVG liquid filters, Houdini conic borders, and scroll-driven progress rings.
 - **Tabbed Code Viewer:** Inspect HTML, CSS, and JavaScript independently or view the combined file directly from the browser popover. Click copy on any tab to copy only that file's contents.
 - **100% Free & Open-Source:** Supported entirely by community donations on Ko-fi.
