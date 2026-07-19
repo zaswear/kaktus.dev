@@ -28,6 +28,11 @@
         <a href="#glow" class="nav-item">Glow Card</a>
         <a href="#otp" class="nav-item">Glass OTP Input</a>
         <a href="#toggle" class="nav-item">Spring Toggle</a>
+        <a href="#parallax" class="nav-item">Parallax 3D Card</a>
+        <a href="#scrambler" class="nav-item">Text Scrambler</a>
+        <a href="#marquee" class="nav-item">Infinite Marquee</a>
+        <a href="#meteor" class="nav-item">Meteor Background</a>
+        <a href="#blob" class="nav-item">Animated Blob Button</a>
       </nav>
     </aside>
 
@@ -252,6 +257,266 @@ inputs.forEach((input, index) => {
 
 .spring-toggle input:checked + .toggle-track .toggle-thumb {
   transform: translateX(28px);
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Parallax 3D Card -->
+      <section id="parallax" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Interacción 3D</span>
+          <h2>Parallax 3D Card</h2>
+          <p>Una tarjeta que se inclina dinámicamente en respuesta a las coordenadas del cursor.</p>
+        </div>
+        
+        <div class="preview-area gradient-preview">
+          <div class="parallax-card" id="parallaxCard">
+            <div class="parallax-content">
+              <h3>Hover me</h3>
+              <p>Move your mouse to tilt</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div>
+            <div class="window-title">parallax.js</div>
+            <button class="copy-btn" data-target="code-parallax">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-parallax" class="language-javascript">
+const card = document.getElementById('parallaxCard');
+card.addEventListener('mousemove', (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  
+  const rotateX = ((y - centerY) / centerY) * -15; // Max 15deg
+  const rotateY = ((x - centerX) / centerX) * 15;
+  
+  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+});
+
+card.addEventListener('mouseleave', () => {
+  card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+});
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Text Scrambler -->
+      <section id="scrambler" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Efectos de Texto</span>
+          <h2>Hacker Text Scrambler</h2>
+          <p>Efecto Cyberpunk que intercambia caracteres aleatoriamente antes de revelar el texto real.</p>
+        </div>
+        
+        <div class="preview-area dark-preview">
+          <h2 class="scramble-text" data-value="SYSTEM COMPROMISED">SYSTEM COMPROMISED</h2>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div>
+            <div class="window-title">scrambler.js</div>
+            <button class="copy-btn" data-target="code-scrambler">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-scrambler" class="language-javascript">
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const scrambleElement = document.querySelector(".scramble-text");
+
+scrambleElement.onmouseover = event => {
+  let iteration = 0;
+  clearInterval(scrambleElement.interval);
+
+  scrambleElement.interval = setInterval(() => {
+    event.target.innerText = event.target.innerText
+      .split("")
+      .map((letter, index) => {
+        if(index < iteration) return event.target.dataset.value[index];
+        return letters[Math.floor(Math.random() * 26)];
+      })
+      .join("");
+    
+    if(iteration >= event.target.dataset.value.length){
+      clearInterval(scrambleElement.interval);
+    }
+    iteration += 1 / 3; // Controls speed of reveal
+  }, 30);
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Infinite Marquee -->
+      <section id="marquee" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Animaciones CSS</span>
+          <h2>Infinite Marquee</h2>
+          <p>Un banner de desplazamiento horizontal continuo sin JS pesado.</p>
+        </div>
+        
+        <div class="preview-area" style="padding: 0; align-items: center;">
+          <div class="marquee-container">
+            <div class="marquee-content">
+              <span>DESIGN</span><span>&bull;</span><span>CODE</span><span>&bull;</span><span>MOTION</span><span>&bull;</span><span>AESTHETICS</span><span>&bull;</span>
+              <span>DESIGN</span><span>&bull;</span><span>CODE</span><span>&bull;</span><span>MOTION</span><span>&bull;</span><span>AESTHETICS</span><span>&bull;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div>
+            <div class="window-title">marquee.css</div>
+            <button class="copy-btn" data-target="code-marquee">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-marquee" class="language-css">
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  background: var(--code-bg);
+  padding: 1rem 0;
+  display: flex;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 2rem;
+  animation: scroll 15s linear infinite;
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Requires duplicated content inside */
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Meteor Shower Background -->
+      <section id="meteor" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Efectos Visuales</span>
+          <h2>Meteor Shower</h2>
+          <p>Generación de meteoritos animados en el fondo mediante Vanilla JS y animaciones CSS.</p>
+        </div>
+        
+        <div class="preview-area dark-preview" id="meteorContainer" style="overflow: hidden; position: relative;">
+          <!-- JS will inject meteor spans here -->
+          <div style="z-index: 10; position: relative; color: white; font-weight: bold; font-size: 1.5rem;">Magic UI Vibe</div>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div>
+            <div class="window-title">meteor.js</div>
+            <button class="copy-btn" data-target="code-meteor">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-meteor" class="language-javascript">
+const container = document.getElementById('meteorContainer');
+
+// Create 15 meteors
+for(let i = 0; i < 15; i++) {
+  const meteor = document.createElement('span');
+  meteor.className = 'meteor';
+  
+  // Randomize position, delay and duration
+  const left = Math.random() * 100; // 0 to 100%
+  const delay = Math.random() * 5; // 0 to 5s
+  const duration = 2 + Math.random() * 2; // 2 to 4s
+  
+  meteor.style.left = `${left}%`;
+  meteor.style.top = `-50px`;
+  meteor.style.animationDelay = `${delay}s`;
+  meteor.style.animationDuration = `${duration}s`;
+  
+  container.appendChild(meteor);
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Animated Blob Button -->
+      <section id="blob" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Controles</span>
+          <h2>Animated Blob Button</h2>
+          <p>Un botón con esferas de colores fluidas moviéndose en su interior a través de CSS blur.</p>
+        </div>
+        
+        <div class="preview-area">
+          <button class="blob-btn">
+            <span class="blob-text">Premium Action</span>
+            <div class="blob-bg"></div>
+          </button>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights"><span class="light red"></span><span class="light yellow"></span><span class="light green"></span></div>
+            <div class="window-title">blob.css</div>
+            <button class="copy-btn" data-target="code-blob">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-blob" class="language-css">
+.blob-btn {
+  position: relative;
+  padding: 1rem 2.5rem;
+  border-radius: 99px;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  color: white;
+}
+
+.blob-text {
+  position: relative;
+  z-index: 10;
+  font-weight: 600;
+}
+
+.blob-bg {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  z-index: 1;
+}
+
+.blob-bg::before, .blob-bg::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  filter: blur(25px);
+  animation: blobMotion 4s infinite alternate ease-in-out;
+}
+
+.blob-bg::before { background: #ff0080; left: -20px; top: -20px; }
+.blob-bg::after { background: #7928ca; right: -20px; bottom: -20px; animation-delay: -2s; }
+
+@keyframes blobMotion {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(20px, 20px) scale(1.2); }
 }
 </code></pre>
           </div>

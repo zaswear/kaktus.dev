@@ -360,6 +360,152 @@ body {
   transform: translateX(26px);
 }
 
+/* COMPONENT 5: Parallax 3D Card */
+.parallax-card {
+  perspective: 1000px;
+  width: 280px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.1s;
+}
+
+.parallax-content {
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  transition: box-shadow 0.3s;
+}
+
+.parallax-content h3 { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
+.parallax-content p { color: var(--text-muted); margin: 0; }
+
+/* COMPONENT 6: Text Scrambler */
+.scramble-text {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  color: var(--text-main);
+  background: linear-gradient(90deg, #ff0080, #7928ca);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: crosshair;
+  padding: 1rem;
+}
+
+/* COMPONENT 7: Infinite Marquee */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  background: var(--code-bg);
+  padding: 1.5rem 0;
+  display: flex;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 3rem;
+  animation: scroll 15s linear infinite;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* COMPONENT 8: Meteor Background */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+  border-radius: 99px;
+  transform: rotate(45deg);
+  animation: meteorFall linear infinite;
+  opacity: 0;
+}
+
+.meteor::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(255,255,255,0.8);
+}
+
+@keyframes meteorFall {
+  0% { transform: rotate(45deg) translateY(-200px); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(45deg) translateY(600px); opacity: 0; }
+}
+
+/* COMPONENT 9: Blob Button */
+.blob-btn {
+  position: relative;
+  padding: 1rem 3rem;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.blob-btn:hover {
+  transform: scale(1.05);
+}
+
+.blob-text {
+  position: relative;
+  z-index: 10;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.blob-bg {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  z-index: 1;
+}
+
+.blob-bg::before, .blob-bg::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: blobMotion 4s infinite alternate ease-in-out;
+}
+
+.blob-bg::before { background: #ff0080; left: -20px; top: -20px; }
+.blob-bg::after { background: #7928ca; right: -20px; bottom: -20px; animation-delay: -2s; }
+
+@keyframes blobMotion {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 40px) scale(1.5); }
+}
+
 /* Syntax Highlighting Tweaks */
 :not(pre) > code[class*="language-"], pre[class*="language-"] {
   background: transparent !important;

@@ -74,7 +74,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* 5. Smooth Scroll for Sidebar Navigation */
+  /* 5. Parallax 3D Card Logic */
+  const parallaxCard = document.getElementById('parallaxCard');
+  if (parallaxCard) {
+    parallaxCard.addEventListener('mousemove', (e) => {
+      const rect = parallaxCard.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -15;
+      const rotateY = ((x - centerX) / centerX) * 15;
+      
+      parallaxCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+    });
+
+    parallaxCard.addEventListener('mouseleave', () => {
+      parallaxCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    });
+  }
+
+  /* 6. Hacker Text Scrambler */
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const scrambleElements = document.querySelectorAll(".scramble-text");
+  
+  scrambleElements.forEach(element => {
+    element.addEventListener("mouseover", event => {
+      let iteration = 0;
+      clearInterval(element.interval);
+      
+      element.interval = setInterval(() => {
+        event.target.innerText = event.target.innerText
+          .split("")
+          .map((letter, index) => {
+            if(index < iteration) {
+              return event.target.dataset.value[index];
+            }
+            return letters[Math.floor(Math.random() * 26)];
+          })
+          .join("");
+        
+        if(iteration >= event.target.dataset.value.length){
+          clearInterval(element.interval);
+        }
+        iteration += 1 / 3;
+      }, 30);
+    });
+  });
+
+  /* 7. Meteor Generator */
+  const meteorContainer = document.getElementById('meteorContainer');
+  if (meteorContainer) {
+    for(let i = 0; i < 15; i++) {
+      const meteor = document.createElement('span');
+      meteor.className = 'meteor';
+      
+      const left = Math.random() * 100;
+      const delay = Math.random() * 5;
+      const duration = 2 + Math.random() * 2;
+      
+      meteor.style.left = `${left}%`;
+      meteor.style.top = `-50px`;
+      meteor.style.animationDelay = `${delay}s`;
+      meteor.style.animationDuration = `${duration}s`;
+      
+      meteorContainer.appendChild(meteor);
+    }
+  }
+
+  /* 8. Smooth Scroll for Sidebar Navigation */
   const navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(item => {
     item.addEventListener('click', (e) => {
