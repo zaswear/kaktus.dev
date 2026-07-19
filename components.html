@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Lab - kaktus.dev</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- Prism.js Dark Theme -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/components.css">
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <a href="index.html" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Volver a kaktus.dev
+        </a>
+        <h1 class="logo">UI Lab</h1>
+        <p class="bio">Premium frontend components. Copy the code and paste it into your projects. Built with pure Vanilla Web APIs.</p>
+      </div>
+      <nav class="categories">
+        <a href="#magnetic" class="nav-item active">Magnetic Button</a>
+        <a href="#glow" class="nav-item">Glow Card</a>
+        <a href="#otp" class="nav-item">Glass OTP Input</a>
+        <a href="#toggle" class="nav-item">Spring Toggle</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      
+      <!-- Component: Magnetic Button -->
+      <section id="magnetic" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Interacción Física</span>
+          <h2>Magnetic Button</h2>
+          <p>Un botón que es atraído físicamente por el cursor, creando una sensación de peso e inercia.</p>
+        </div>
+        
+        <div class="preview-area">
+          <button class="magnetic-btn" id="magneticBtn">
+            <span class="magnetic-text">Hover Me</span>
+          </button>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights">
+              <span class="light red"></span>
+              <span class="light yellow"></span>
+              <span class="light green"></span>
+            </div>
+            <div class="window-title">script.js</div>
+            <button class="copy-btn" data-target="code-magnetic">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-magnetic" class="language-javascript">
+const btn = document.querySelector('.magnetic-btn');
+const text = btn.querySelector('.magnetic-text');
+
+btn.addEventListener('mousemove', (e) => {
+  const rect = btn.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  
+  // Mover el botón
+  btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  // Efecto parallax en el texto interno
+  text.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+});
+
+btn.addEventListener('mouseleave', () => {
+  btn.style.transform = 'translate(0px, 0px)';
+  text.style.transform = 'translate(0px, 0px)';
+});
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Glow Card -->
+      <section id="glow" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Efectos Visuales</span>
+          <h2>Glow Hover Card</h2>
+          <p>Una tarjeta premium que revela un degradado luminoso que rastrea la posición de tu cursor.</p>
+        </div>
+        
+        <div class="preview-area dark-preview">
+          <div class="glow-card" id="glowCard">
+            <div class="glow-card-border"></div>
+            <div class="glow-card-content">
+              <h3>CodeXR Style Card</h3>
+              <p>Mueve el ratón sobre esta tarjeta para revelar el efecto de luz perimetral.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights">
+              <span class="light red"></span>
+              <span class="light yellow"></span>
+              <span class="light green"></span>
+            </div>
+            <div class="window-title">styles.css</div>
+            <button class="copy-btn" data-target="code-glow">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-glow" class="language-css">
+.glow-card {
+  position: relative;
+  background: #111;
+  border-radius: 16px;
+  padding: 1px; /* Espacio para el borde brillante */
+  overflow: hidden;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  top: var(--y, 0);
+  left: var(--x, 0);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle, 
+    rgba(255, 215, 0, 0.4) 0%, 
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+.glow-card-content {
+  background: #111; /* Oculta el fondo central, dejando ver solo los bordes */
+  border-radius: 15px;
+  position: relative;
+  z-index: 1;
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Glass OTP Input -->
+      <section id="otp" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Formularios</span>
+          <h2>Glass OTP Input</h2>
+          <p>Campos de verificación limpios con desenfoque de fondo y transiciones de auto-focus.</p>
+        </div>
+        
+        <div class="preview-area gradient-preview">
+          <div class="otp-container">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0">
+            <input type="text" maxlength="1" class="otp-input" placeholder="0">
+          </div>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights">
+              <span class="light red"></span><span class="light yellow"></span><span class="light green"></span>
+            </div>
+            <div class="window-title">otp.js</div>
+            <button class="copy-btn" data-target="code-otp">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-otp" class="language-javascript">
+const inputs = document.querySelectorAll('.otp-input');
+
+inputs.forEach((input, index) => {
+  input.addEventListener('keyup', (e) => {
+    // Si se introduce un valor, pasar al siguiente
+    if (e.target.value.length === 1 && index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+    // Si se pulsa Borrar, volver al anterior
+    if (e.key === 'Backspace' && index > 0) {
+      inputs[index - 1].focus();
+    }
+  });
+});
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Spring Toggle -->
+      <section id="toggle" class="showcase-section">
+        <div class="showcase-header">
+          <span class="badge">Controles</span>
+          <h2>Spring Toggle</h2>
+          <p>Un interruptor de estilo iOS con una curva de animación muy fluida y satisfactoria.</p>
+        </div>
+        
+        <div class="preview-area">
+          <label class="spring-toggle">
+            <input type="checkbox" id="toggleInput">
+            <div class="toggle-track">
+              <div class="toggle-thumb"></div>
+            </div>
+          </label>
+        </div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="traffic-lights">
+              <span class="light red"></span><span class="light yellow"></span><span class="light green"></span>
+            </div>
+            <div class="window-title">toggle.css</div>
+            <button class="copy-btn" data-target="code-toggle">Copiar</button>
+          </div>
+          <div class="window-body">
+<pre><code id="code-toggle" class="language-css">
+.spring-toggle input { display: none; }
+
+.toggle-track {
+  width: 60px; height: 32px;
+  background: #333;
+  border-radius: 99px;
+  padding: 4px;
+  cursor: pointer;
+  transition: background 0.4s ease;
+}
+
+.toggle-thumb {
+  width: 24px; height: 24px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  /* Cubic bezier para el efecto rebote / spring */
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spring-toggle input:checked + .toggle-track {
+  background: #007aff;
+}
+
+.spring-toggle input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(28px);
+}
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="assets/js/components.js"></script>
+</body>
+</html>
