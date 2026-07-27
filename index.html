@@ -240,7 +240,7 @@
       from { opacity: 0; transform: translateY(30px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .hero h2 {
+    .hero h1 {
       font-family: var(--font-display);
       font-size: clamp(2.5rem, 8vw, 4.8rem);
       font-weight: 800;
@@ -1477,15 +1477,16 @@
       <div class="logo">
         kaktus<span>.dev</span>
       </div>
-      <button class="theme-btn" id="theme-toggle">THEME: DARK</button>
+      <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark and light theme">THEME: DARK</button>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-      <h2>
+    <main>
+    <section class="hero" aria-label="Hero">
+      <h1>
         <span class="gradient-text">Aesthetics & Code</span><br>
         in Perfect Sync.
-      </h2>
+      </h1>
       <p>
         A massive interactive showcase of modern design patterns, high-performance fluid transitions, and native Web APIs without heavy frameworks.
       </p>
@@ -2273,6 +2274,7 @@
         <a href="https://ko-fi.com/I2I31CXQVM" target="_blank" class="support-btn">Support on Ko-fi</a>
       </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer style="text-align: center; padding: 3rem 1rem; color: var(--text-mid); font-family: var(--font-sans); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 4rem;">

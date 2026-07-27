@@ -30,17 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const magneticBtn = document.getElementById('magneticBtn');
   if (magneticBtn) {
     const text = magneticBtn.querySelector('.magnetic-text');
-    
-    magneticBtn.addEventListener('mousemove', (e) => {
+
+    magneticBtn.addEventListener('pointermove', (e) => {
       const rect = magneticBtn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      
+
       magneticBtn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
       text.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
     });
-    
-    magneticBtn.addEventListener('mouseleave', () => {
+
+    magneticBtn.addEventListener('pointerleave', () => {
       magneticBtn.style.transform = 'translate(0px, 0px)';
       text.style.transform = 'translate(0px, 0px)';
     });
@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
   /* 3. Glow Card Logic */
   const glowCard = document.getElementById('glowCard');
   if (glowCard) {
-    glowCard.addEventListener('mousemove', (e) => {
+    glowCard.addEventListener('pointermove', (e) => {
       const rect = glowCard.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       glowCard.style.setProperty('--x', `${x}px`);
       glowCard.style.setProperty('--y', `${y}px`);
     });
@@ -77,21 +77,21 @@ document.addEventListener('DOMContentLoaded', () => {
   /* 5. Parallax 3D Card Logic */
   const parallaxCard = document.getElementById('parallaxCard');
   if (parallaxCard) {
-    parallaxCard.addEventListener('mousemove', (e) => {
+    parallaxCard.addEventListener('pointermove', (e) => {
       const rect = parallaxCard.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       const rotateX = ((y - centerY) / centerY) * -15;
       const rotateY = ((x - centerX) / centerX) * 15;
-      
+
       parallaxCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
     });
 
-    parallaxCard.addEventListener('mouseleave', () => {
+    parallaxCard.addEventListener('pointerleave', () => {
       parallaxCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     });
   }
