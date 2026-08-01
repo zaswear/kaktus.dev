@@ -167,4 +167,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sections.forEach(section => observer.observe(section));
 
+  /* 7. Live Editable Playground Runner */
+  const playgroundEditors = document.querySelectorAll('[contenteditable="true"]');
+  playgroundEditors.forEach((editor) => {
+    editor.addEventListener('input', () => {
+      const section = editor.closest('.showcase-section');
+      if (!section) return;
+      const previewArea = section.querySelector('.preview-area');
+      if (!previewArea) return;
+      
+      const codeType = editor.id;
+      if (codeType.endsWith('-html')) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = editor.innerText;
+        // Keep interactive elements refreshed
+      }
+    });
+  });
+
 });
