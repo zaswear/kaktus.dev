@@ -1,6 +1,6 @@
 # kaktus.dev 🌵
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I31CXQVM)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/zaswear)
 
 A premium, high-performance showcase of **38 interactive frontend design patterns** built using native Web APIs and modern CSS transitions. No heavy frameworks, no bloated libraries—just clean, state-of-the-art web craft.
 
